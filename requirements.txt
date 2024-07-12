@@ -1,3 +1,5 @@
 fastapi[all]
-uvicorn[standart]
-
+uvicorn
+sqlalchemy
+aiosqlite
+python-multipart
