@@ -1,5 +1,6 @@
 fastapi[all]
 uvicorn
 sqlalchemy
-aiosqlite
 python-multipart
+passlib
+jwt
