@@ -42,7 +42,6 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
 
 
 def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]) -> User:
-    print("get_current_active_user")
 
     if not current_user.active:
 

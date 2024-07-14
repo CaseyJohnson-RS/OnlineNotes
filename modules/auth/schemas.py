@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from typing import Annotated
+from pydantic import BaseModel, Field
 
 # Pydantic модель токена
 class Token(BaseModel):

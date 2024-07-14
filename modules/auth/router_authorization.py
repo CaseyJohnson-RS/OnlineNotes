@@ -13,9 +13,14 @@ from fastapi import APIRouter, Depends
 # Создаем маршрутизатор для подключения его к основному приложению
 router = APIRouter()
 
-
+# Авторизация
 @router.post("/token")
 def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
+
+    """
+    Принимает логин и пароль и возвращает токен доступа. 
+    Естественно возвращает ошибку, если логин и пароль были недействительными
+    """
 
     Log(f"Authorization: request access token")
     Log(f"Username: {form_data.username}")
@@ -34,12 +39,8 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     # Иначе начинаем создавать токен доступа
     # Фиксируем время сгорания токена
     assecc_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-
-    # Создаем токен
     access_token = create_access_token(data={"sub": user_id}, expires_delta=assecc_token_expires)
 
     Log(f"Token created with params: data(user_id={user_id}) token_expires({ACCESS_TOKEN_EXPIRE_MINUTES})")
 
     return Token(access_token=access_token, token_type="bearer")
-
-# Допиши регистрацию
