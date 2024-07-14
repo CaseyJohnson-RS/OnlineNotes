@@ -3,18 +3,18 @@ from common.schemas import User
 
 fake_db = {
     "a@a.com" : {
-        "id": 0,
+        "id": 1,
         "nickname": "Casey",
-        "password_hash": "c34045c1a1db8d1b3fca8a692198466952daae07eaf6104b4c87ed3b55b6af1b", # "cool"
-        "active": False ,
+        "password_hash": "$2b$12$j4zr9aO5JzjL1092w8q43O.kumInWxRb4ZML3ovjZMwzuIVqtV7Ey", # "cool"
+        "active": True ,
         "role": "user"
     },
 
     "b@b.com" : {
-        "id": 1,
+        "id": 2,
         "nickname": "John",
-        "password_hash": "c5052532c2206140dfdc3b0d756cce0831ac00fd978f2bfd150858e7ee217a8c", # "bed"
-        "active": False ,
+        "password_hash": "$2b$12$ZszQjGzrpNr5tFhPlBP.lOJGcd8wmoFKXleI0Q8xFjwAJ0MrAfkiC", # "bed"
+        "active": True ,
         "role": "user"
     }
 

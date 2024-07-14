@@ -2,25 +2,27 @@
 # Модуле для того, чтобы организовать единую точку входа
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-from .router import router
+from .config import LOGGING, LOG_FILE_PATH
+
+def Log(s: str):
+
+    if LOGGING:
+        file = open(LOG_FILE_PATH, 'a')
+        file.write(s + '\n')
+        file.close()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def initialize():
-
-    # Здесь тоже твой код
     
     # Всегда возвращаем словарь
     # Обязательные ключи:
     # "routers": []
     return { 
-        "routers": [router] 
+        "routers": []
     }
 
 def shutdown():
 
-    # И здесь тоже твой код
-
     # Всегда возвращаем словарь
     return { }
-
