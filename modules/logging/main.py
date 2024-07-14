@@ -3,12 +3,16 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 from .config import LOGGING, LOG_FILE_PATH
+from datetime import datetime
 
 def Log(s: str):
 
     if LOGGING:
+        now = datetime.now()
+        date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
+
         file = open(LOG_FILE_PATH, 'a')
-        file.write(s + '\n')
+        file.write(str(now) + ": " + s + '\n')
         file.close()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
