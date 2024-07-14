@@ -151,4 +151,6 @@ def sign_up_confirm(
 
     Log(f"Token created with params: data(user_id={user_id}) token_expires({ACCESS_TOKEN_EXPIRE_MINUTES})")
 
+    del sign_up_buffer[username]
+
     return Token(access_token=access_token, token_type="bearer")
