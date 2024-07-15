@@ -13,7 +13,7 @@ from .constants import SECRET_KEY
 
 
 # Инициализируем генератор случайных чисел
-seed(datetime.now())
+seed(datetime.now().microsecond)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -1,4 +1,5 @@
-fastapi[all]
+fastapi
+pydantic
 uvicorn
 sqlalchemy
 python-multipart
