@@ -85,12 +85,13 @@ CREATE TABLE IF NOT EXISTS public."Note_status"
 );
 
 COMMENT ON TABLE public."Note_status"
-    IS 'Статус заметки (действительна, в архиве, в корзине)';
+    IS 'Статус заметки (активна, в архиве, в корзине)';
 
 CREATE TABLE IF NOT EXISTS public."Note_images"
 (
     user_id bigint,
     note_id integer,
+    image_id bigserial,
     image_path character varying(128),
     PRIMARY KEY (user_id, note_id, image_path)
 );
