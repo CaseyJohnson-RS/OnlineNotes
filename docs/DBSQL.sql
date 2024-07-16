@@ -8,16 +8,13 @@ CREATE TABLE IF NOT EXISTS public."Users"
     id bigserial NOT NULL,
     email character varying(256) NOT NULL,
     nickname character varying(64) DEFAULT 'John Doe',
-    avatar_img_path character varying(128),
+    avatar_img_id bigint,
     password_hash character varying(64) NOT NULL,
     active boolean NOT NULL DEFAULT TRUE,
     role_id smallint NOT NULL DEFAULT 1,
     PRIMARY KEY (id),
     CONSTRAINT "User email must be unique" UNIQUE (email)
 );
-
-COMMENT ON TABLE public."Users"
-    IS 'Таблица, которая будет хранить данные о пользователях';
 
 CREATE TABLE IF NOT EXISTS public."Roles"
 (
@@ -35,9 +32,6 @@ CREATE TABLE IF NOT EXISTS public."Error_messages"
     PRIMARY KEY (id)
 );
 
-COMMENT ON TABLE public."Error_messages"
-    IS 'Таблица, в которой будут появляться записи об ошибках приложения от пользователей';
-
 CREATE TABLE IF NOT EXISTS public."Reviews"
 (
     id serial NOT NULL,
@@ -48,9 +42,6 @@ CREATE TABLE IF NOT EXISTS public."Reviews"
 	CONSTRAINT "Rating wrong value" CHECK(rating > 0 AND rating < 11)
 );
 
-COMMENT ON TABLE public."Reviews"
-    IS 'Тут будут отзывы пользователей приложения';
-
 CREATE TABLE IF NOT EXISTS public."User_note_labels"
 (
     user_id bigint,
@@ -58,9 +49,6 @@ CREATE TABLE IF NOT EXISTS public."User_note_labels"
     PRIMARY KEY (user_id, label),
     UNIQUE (label)
 );
-
-COMMENT ON TABLE public."User_note_labels"
-    IS 'Ярлыки, которые пользователь навесил на записки';
 
 CREATE TABLE IF NOT EXISTS public."Notes"
 (
@@ -73,9 +61,6 @@ CREATE TABLE IF NOT EXISTS public."Notes"
     PRIMARY KEY (user_id, note_id)
 );
 
-COMMENT ON TABLE public."Notes"
-    IS 'Заметки';
-
 CREATE TABLE IF NOT EXISTS public."Note_status"
 (
     id smallserial,
@@ -84,16 +69,12 @@ CREATE TABLE IF NOT EXISTS public."Note_status"
     UNIQUE (title)
 );
 
-COMMENT ON TABLE public."Note_status"
-    IS 'Статус заметки (активна, в архиве, в корзине)';
-
 CREATE TABLE IF NOT EXISTS public."Note_images"
 (
     user_id bigint,
     note_id integer,
-    image_id bigserial,
-    image_path character varying(128),
-    PRIMARY KEY (user_id, note_id, image_path)
+    image_id bigint,
+    PRIMARY KEY (user_id, note_id, image_id)
 );
 
 COMMENT ON TABLE public."Note_images"
@@ -107,6 +88,14 @@ CREATE TABLE IF NOT EXISTS public."Note_assigned_labels"
     PRIMARY KEY (user_id, note_id, label)
 );
 
+CREATE TABLE IF NOT EXISTS public."Images"
+(
+    id bigint,
+    image_path character varying(128),
+    PRIMARY KEY (id),
+    UNIQUE (image_path)
+);
+
 ALTER TABLE IF EXISTS public."Users"
     ADD FOREIGN KEY (role_id)
     REFERENCES public."Roles" (id) MATCH SIMPLE
@@ -114,6 +103,12 @@ ALTER TABLE IF EXISTS public."Users"
     ON DELETE NO ACTION
     NOT VALID;
 
+ALTER TABLE IF EXISTS public."Users"
+    ADD FOREIGN KEY (avatar_img_id)
+    REFERENCES public."Images" (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
 
 ALTER TABLE IF EXISTS public."Error_messages"
     ADD CONSTRAINT "Every message must have an author" FOREIGN KEY (email)
@@ -198,6 +193,9 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER set_note_id_trigger
 BEFORE INSERT ON "Notes"
 FOR EACH ROW EXECUTE FUNCTION set_note_id();
+
+CREATE UNIQUE INDEX email_idx ON "Users" (email);
+CREATE UNIQUE INDEX note_idx ON "Notes" (user_id) INCLUDE (note_id);
 
 INSERT INTO "Roles" (role_name) VALUES ('user');
 INSERT INTO "Roles" (role_name) VALUES ('admin');
