@@ -5,11 +5,11 @@
 import psycopg2
 from .config import DATABASE_URI
 
-conn = None
+connection = None
 
 try:
     # пытаемся подключиться к базе данных
-    conn = psycopg2.connect(DATABASE_URI)
+    connection = psycopg2.connect(DATABASE_URI)
 except:
     # в случае сбоя подключения будет выведено сообщение в STDOUT
     print('Can`t establish connection to database')
@@ -18,4 +18,4 @@ except:
 
 def shutdown():
 
-    conn.close()
+    connection.close()

@@ -1,10 +1,16 @@
-from .main import conn
+from psycopg2.extras import RealDictCursor
 
+from .main import connection
+from common.schemas import User
+
+# В свое оправдание скажу, что базы данных проектировать я не умел до того
+# Как начал этот проект. И осуждать меня за этот плохой API взаимодействия
+# С базой данных не стоит. Лучше помогите материально(
 
 def DBSession(func):
     
     def wrapper(*args, **kwargs):
-        cursor = conn.cursor()
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
         result = func(*args, **kwargs,cursor=cursor)
         cursor.close()
         return result
@@ -12,92 +18,106 @@ def DBSession(func):
     return wrapper
 
 @DBSession
-def p(cursor):
+def get_user_by_username(username: str, cursor) -> User | None:
 
-    cursor.execute("SELECT * FROM \"Roles\"")
+    cursor.execute("SELECT * FROM \"Users\" WHERE email=%s", (username,))
+    user_data = cursor.fetchone()
 
-    res = cursor.fetchall()
+    if user_data is None:
+        return None
 
-    print(res)
+    cursor.execute("SELECT * FROM \"Roles\" WHERE id=%s", (user_data["role_id"],))
+    role = cursor.fetchone()
 
-p()
+    user = User(
+        id = user_data["id"],
+        email = user_data["email"],
+        password_hash = user_data["password_hash"],
+        active = user_data["active"],
+        role = role["role_name"]
+    )
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Этот код абсолютный кал
+    return user
 
-from common.schemas import User
+@DBSession
+def get_user_by_id(id: int, cursor) -> User | None:
 
+    cursor.execute("SELECT * FROM \"Users\" WHERE id=%s", (id,))
+    user_data = cursor.fetchone()
 
-fake_db = {
-    "a@a.a" : {
-        "id": 1,
-        "nickname": "Casey",
-        "password_hash": "$2b$12$j4zr9aO5JzjL1092w8q43O.kumInWxRb4ZML3ovjZMwzuIVqtV7Ey", # "cool"
-        "active": True ,
-        "role": "user"
-    },
+    if user_data is None:
+        return None
 
-    "b@b.b" : {
-        "id": 2,
-        "nickname": "John",
-        "password_hash": "$2b$12$ZszQjGzrpNr5tFhPlBP.lOJGcd8wmoFKXleI0Q8xFjwAJ0MrAfkiC", # "bed"
-        "active": True ,
-        "role": "user"
-    },
+    cursor.execute("SELECT * FROM \"Roles\" WHERE id=%s", (user_data["role_id"],))
+    role = cursor.fetchone()
 
-    "c@c.c" : {
-        "id": 3,
-        "nickname": "John",
-        "password_hash": "$2b$12$ZszQjGzrpNr5tFhPlBP.lOJGcd8wmoFKXleI0Q8xFjwAJ0MrAfkiC", # "bed"
-        "active": True ,
-        "role": "admin"
-    }
-
-}
-
-
-def get_hashed_password_by_username(username: str) -> str | None:
-
-    if username in fake_db:
-        return fake_db[username]["password_hash"]
-
-    return None
-
-
-def get_user_id_by_username(username: str) -> int | None:
-
-    if username in fake_db:
-        return fake_db[username]["id"]
-
-    return None
-
-
-def get_user_by_id(user_id: int) -> User:
-
-    email = ""
-
-    for i in fake_db:
-        if fake_db[i]["id"] == user_id:
-            email = i
-    
-    user = User(email=email,**fake_db[email])
+    user = User(
+        id = user_data["id"],
+        email = user_data["email"],
+        password_hash = user_data["password_hash"],
+        active = user_data["active"],
+        role = role["role_name"]
+    )
 
     return user
 
 
-def add_user(username: str, password_hash: str, nickname: str, active: bool, role: str) -> bool:
+@DBSession
+def get_password_hash_by_username(username: str, cursor) -> str | None:
 
-    max_index = 1
+    cursor.execute("SELECT password_hash FROM \"Users\" WHERE email=%s", (username,))
+    data = cursor.fetchone()
 
-    for i in fake_db:
-        max_index = max_index < fake_db[i]["id"] and fake_db[i]["id"] or max_index
+    if data is None: 
+        return None
 
-    fake_db[username] = {
-        "password_hash": password_hash,
-        "nickname": nickname,
-        "active": active,
-        "role": role,
-        "id": max_index + 1
-    }
+    return data["password_hash"]
 
-    return max_index + 1
+
+@DBSession
+def get_user_id_by_username(username: str, cursor) -> int | None:
+
+    cursor.execute("SELECT id FROM \"Users\" WHERE email=%s", (username,))
+    data = cursor.fetchone()
+
+    if data is None: 
+        return None
+    
+    return data["id"]
+
+
+@DBSession
+def add_user(username: str, password_hash: str, nickname: str, active: bool, role: str, cursor) -> int | None:
+
+    cursor.execute("SELECT id FROM \"Roles\" WHERE role_name=%s", (role,))
+    data = cursor.fetchone()
+
+    if data is None:
+        return None
+    
+    role_id = data["id"]
+
+    query = """
+        INSERT INTO "Users" (email, nickname, password_hash, active, role_id)
+        VALUES (%s, %s, %s, %s, %s)
+    """
+
+    query_values = (username, nickname, password_hash, active, role_id)
+
+    cursor.execute(query, query_values)
+    connection.commit()
+
+    cursor.execute("SELECT id FROM \"Users\" WHERE email=%s", (username,))
+
+    return cursor.fetchone()["id"]
+
+"""
+@DBSession
+def p(cursor):
+
+    cursor.execute("SELECT role_name FROM \"Roles\" WHERE id=%s", (1,))
+    t = cursor.fetchone()
+
+    print(t)
+
+p()"""

@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-"""
+
 from typing import Annotated
 from common.schemas import User
 from fastapi import Depends
@@ -43,4 +43,4 @@ from modules.auth.dependences import get_current_active_user
 
 @app.get("/")
 def g(user: Annotated[User, Depends(get_current_active_user)]) -> User:
-    return user"""
+    return user
