@@ -77,9 +77,6 @@ CREATE TABLE IF NOT EXISTS public."Note_images"
     PRIMARY KEY (user_id, note_id, image_id)
 );
 
-COMMENT ON TABLE public."Note_images"
-    IS 'Ссылки на изображения в заметках';
-
 CREATE TABLE IF NOT EXISTS public."Note_assigned_labels"
 (
     user_id bigint,

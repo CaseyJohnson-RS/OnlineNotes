@@ -7,7 +7,7 @@ import smtplib
 from email.message import EmailMessage
 import ssl
 
-from ..database.main import get_hashed_password_by_username, get_user_id_by_username, add_user
+from ..database.crud import get_hashed_password_by_username, get_user_id_by_username, add_user
 from .config import ALGORITHM, EMAIL_SENDER_ADDRESS, EMAIL_SENDER_PASSWORD
 from .constants import SECRET_KEY
 

@@ -9,8 +9,8 @@ from modules.logging import main as m_logging
 def initialize(app: FastAPI):
 
     routers = []
-    routers += m_auth.initialize()["routers"]
-    routers += m_logging.initialize()["routers"]
+    routers += m_auth.routers
+    routers += m_logging.routers
 
     for router in routers:
         app.include_router(router)

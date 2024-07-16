@@ -4,7 +4,7 @@ from common.schemas import User
 from .exceptions import CREDENTIALS_EXCEPTION, INACTIVE_USER_EXCEPTION
 from .config import ALGORITHM
 from .constants import SECRET_KEY
-from ..database.main import get_user_by_id
+from ..database.crud import get_user_by_id
 from ..logging.main import Log
 
 from fastapi.security import OAuth2PasswordBearer

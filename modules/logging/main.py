@@ -14,18 +14,10 @@ def Log(s: str):
         file.write(str(now) + ": " + s + '\n')
         file.close()
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+routers = []
 
-def initialize():
-    
-    # Всегда возвращаем словарь
-    # Обязательные ключи:
-    # "routers": []
-    return { 
-        "routers": []
-    }
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def shutdown():
 
-    # Всегда возвращаем словарь
-    return { }
+    pass

@@ -5,26 +5,17 @@
 from .router_authorization import router as auth_router
 from. router_registration import router as regist_router
 
+routers = [
+    auth_router, 
+    regist_router
+] 
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-def initialize():
-
-    # Здесь тоже твой код
-    
-    # Всегда возвращаем словарь
-    # Обязательные ключи:
-    # "routers": []
-    return { 
-        "routers": [
-            auth_router, 
-            regist_router
-        ] 
-    }
 
 def shutdown():
 
-    # И здесь тоже твой код
+    # Здесь твой код
 
     # Всегда возвращаем словарь
-    return { }
+    pass
 
