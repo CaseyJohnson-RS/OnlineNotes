@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS public."Users"
     id bigserial NOT NULL,
     email character varying(256) NOT NULL,
     nickname character varying(64) DEFAULT 'John Doe',
-    avatar_img_id bigint,
     password_hash character varying(64) NOT NULL,
     active boolean NOT NULL DEFAULT TRUE,
     role_id smallint NOT NULL DEFAULT 1,
@@ -69,14 +68,6 @@ CREATE TABLE IF NOT EXISTS public."Note_status"
     UNIQUE (title)
 );
 
-CREATE TABLE IF NOT EXISTS public."Note_images"
-(
-    user_id bigint,
-    note_id integer,
-    image_id bigint,
-    PRIMARY KEY (user_id, note_id, image_id)
-);
-
 CREATE TABLE IF NOT EXISTS public."Note_assigned_labels"
 (
     user_id bigint,
@@ -85,24 +76,10 @@ CREATE TABLE IF NOT EXISTS public."Note_assigned_labels"
     PRIMARY KEY (user_id, note_id, label)
 );
 
-CREATE TABLE IF NOT EXISTS public."Images"
-(
-    id bigint,
-    image_path character varying(128),
-    PRIMARY KEY (id),
-    UNIQUE (image_path)
-);
 
 ALTER TABLE IF EXISTS public."Users"
     ADD FOREIGN KEY (role_id)
     REFERENCES public."Roles" (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-ALTER TABLE IF EXISTS public."Users"
-    ADD FOREIGN KEY (avatar_img_id)
-    REFERENCES public."Images" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -146,22 +123,12 @@ ALTER TABLE IF EXISTS public."Notes"
     ON DELETE NO ACTION
     NOT VALID;
 
-
-ALTER TABLE IF EXISTS public."Note_images"
-    ADD FOREIGN KEY (user_id, note_id)
-    REFERENCES public."Notes" (user_id, note_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-
 ALTER TABLE IF EXISTS public."Note_assigned_labels"
     ADD FOREIGN KEY (user_id, note_id)
     REFERENCES public."Notes" (user_id, note_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
-
 
 ALTER TABLE IF EXISTS public."Note_assigned_labels"
     ADD FOREIGN KEY (label)
