@@ -2,7 +2,7 @@ from typing import Annotated
 from common.schemas import User, Note
 
 from modules.auth.dependences import get_current_active_user
-from modules.database.crud import create_note_in_db, get_note, update_note_in_db
+from modules.database.crud import create_note_in_db, update_note_in_db, delete_note_in_db, clear_note_labels_from_db
 
 from fastapi import APIRouter, Depends, Body
 
@@ -21,5 +21,8 @@ def update_note(user: Annotated[User, Depends(get_current_active_user)], note: A
 
 @router.delete("/delete-note", tags=["NotesAPI"])
 def delete_note(user: Annotated[User, Depends(get_current_active_user)], note_id: Annotated[int, Body()]) -> bool:
+    if clear_note_labels_from_db(user.id, note_id):
+        return delete_note_in_db(user.id, note_id)
+    else:
+        return False
 
-    pass

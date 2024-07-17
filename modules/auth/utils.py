@@ -8,7 +8,7 @@ from email.message import EmailMessage
 import ssl
 
 from ..database.crud import get_user_password_hash, get_user_id, add_user
-from .config import ALGORITHM, EMAIL_SENDER_ADDRESS, EMAIL_SENDER_PASSWORD
+from .config import ALGORITHM, EMAIL_SENDER_ADDRESS, EMAIL_SENDER_PASSWORD, ACCESS_TOKEN_EXPIRE_MINUTES
 from .constants import SECRET_KEY
 
 
@@ -49,9 +49,10 @@ def authenticate_user(username: str, password: str) -> int | None:
 
 
 # Создание токена доступа (чтобы не пришлось каждый раз вводить логин и пароль)
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict):
 
     to_encode = data.copy()
+    expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -85,7 +86,7 @@ def check_username_already_exists(username: str) -> bool:
 # Если залесть в базу данных и поменять её вручную
 # Надо как-то решать этот вопрос 
 def create_user(username: str, password_hash: str, nickname: str) -> int:
-    return add_user(username, password_hash, nickname, active=True, role="user")
+    return add_user(username, password_hash, nickname, active=True, role_name="user")
 
 
 # Отправка на почту кода подтверждения

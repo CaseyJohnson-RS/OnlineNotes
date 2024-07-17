@@ -3,10 +3,10 @@ from datetime import datetime, timedelta, timezone
 
 from .utils import check_username_already_exists, send_sequence_to_email, get_number_sequence, get_password_hash, create_access_token
 from .exceptions import BAD_CONFIRMATION_EXCEPTION, LATE_CONFIRM_EXCEPTION, WRONG_CONFIRMATION_EXCEPTION, BAD_PASS_RESTORE_EXCEPTION, LATE_RESTORE_EXCEPTION
-from .config import RESTORE_CONFIRM_EXPIRE_MINUTES, NEW_PASSWORD_WAIT_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
+from .config import RESTORE_CONFIRM_EXPIRE_MINUTES, NEW_PASSWORD_WAIT_EXPIRE_MINUTES
 from .schemas import Token
 
-from modules.logging.main import Log
+from modules.logging.main import Log, LogTime
 from modules.database.crud import update_password_hash, get_user_id
 
 from fastapi import APIRouter, Form, BackgroundTasks
@@ -20,22 +20,30 @@ set_new_password_buffer = {}
 
 
 @router.post("/restore-password", tags=["Authorization", "Restore password"])
-def restore_password_by_email(
+def restore_password_by_username(
     username: Annotated[str, Form()],
     bgtasks: BackgroundTasks
 ) -> bool:
     
+    LogTime()
+    Log("Restore password request")
+    
     if not check_username_already_exists(username=username):
+        Log(f"User name {username} doesn't exist. Denied")
         return False
     
     confirm_sequence = get_number_sequence(6)
     
     bgtasks.add_task(send_sequence_to_email, confirm_sequence, username)
 
+    Log(f"Send confirm password restore sequence {confirm_sequence}")
+
     restore_confirm_buffer[username] = {
         "confirm_sequence": confirm_sequence,
         "confirm_expires": datetime.now(timezone.utc) + timedelta(minutes=RESTORE_CONFIRM_EXPIRE_MINUTES)
     }
+
+    Log(f"Wating for confirm password restore from {username} within {RESTORE_CONFIRM_EXPIRE_MINUTES} minutes...")
 
     return True
 
@@ -47,6 +55,9 @@ def confirm_password_restore(
             description="Код, который пришел на почтовый ящик"
         )]
 ) -> bool:
+    
+    LogTime()
+    Log("Confirm password restore request")
     
     # Был ли пользователь в буфере восстановления пароля?
     if not username in restore_confirm_buffer:
@@ -71,6 +82,8 @@ def confirm_password_restore(
         "wait_password_expires": datetime.now(timezone.utc) + timedelta(minutes=NEW_PASSWORD_WAIT_EXPIRE_MINUTES)
     }
 
+    Log(f"Wating for password change from {username} within {NEW_PASSWORD_WAIT_EXPIRE_MINUTES} minutes...")
+
     return True
 
 
@@ -80,6 +93,9 @@ def set_new_password_for_user(
     password: Annotated[str, Form()]
 ) -> Token:
     
+    LogTime()
+    Log("Set new password request")
+    
     # Был ли пользователь в буфере восстановления пароля?
     if not username in set_new_password_buffer:
         Log("User name wasn't in the buffer of set password. Denied")
@@ -87,7 +103,7 @@ def set_new_password_for_user(
     
     # Не прошло ли доступное время подтверждения? 
     if set_new_password_buffer[username]["wait_password_expires"] < datetime.now(timezone.utc):
-        Log("Too late. Denied")
+        Log("Too late to restore password. Denied")
         del restore_confirm_buffer[username]
         raise LATE_RESTORE_EXCEPTION
 
@@ -96,11 +112,11 @@ def set_new_password_for_user(
 
     update_password_hash(username, password_hash=password_hash)
 
-    # Создаем токен доступа
-    assecc_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user_id}, expires_delta=assecc_token_expires)
+    Log("Password updated")
 
-    Log(f"Token created with params: data(user_id={user_id}) token_expires({ACCESS_TOKEN_EXPIRE_MINUTES})")
+    access_token = create_access_token(data={"sub": user_id})
+
+    Log(f"Token created with params (user_id={user_id})")
 
     del set_new_password_buffer[username]
 

@@ -12,9 +12,9 @@ from .exceptions import USERNAME_EXISTS_EXCEPTION, \
     LATE_CONFIRM_EXCEPTION, \
     BAD_CONFIRMATION_EXCEPTION, \
     WRONG_CONFIRMATION_EXCEPTION
-from .config import REGIST_CONFIRM_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
+from .config import REGIST_CONFIRM_EXPIRE_MINUTES
 from .schemas import Token
-from modules.logging.main import Log
+from modules.logging.main import Log, LogTime
 
 from fastapi import APIRouter, BackgroundTasks, Query, Form
 
@@ -73,7 +73,8 @@ def sign_up(
     Этот код нужно отправить вместе с логином на путь '/registration_confirm'
     """
 
-    Log("# Registration request")
+    LogTime()
+    Log("Registration request")
     Log(f"Username: {username}")
     Log(f"Password: {password}")
     Log(f"Nickname: {nickname}")
@@ -96,7 +97,7 @@ def sign_up(
         "confirm_expires": datetime.now(timezone.utc) + timedelta(minutes=REGIST_CONFIRM_EXPIRE_MINUTES)
     }
 
-    Log(f"Waiting for confirmation within {REGIST_CONFIRM_EXPIRE_MINUTES} minutes...")
+    Log(f"Waiting for confirmation from {username} within {REGIST_CONFIRM_EXPIRE_MINUTES} minutes...")
 
     return True
 
@@ -121,7 +122,8 @@ def sign_up_confirm(
     Если всё впорядке, то создает пользователя и возвращает токен доступа
     """
 
-    Log("# Redistration confirm request")
+    LogTime()
+    Log("Redistration confirm request")
 
     # Был ли пользователь в буфере регистрации?
     if not username in sign_up_buffer:
@@ -130,7 +132,7 @@ def sign_up_confirm(
     
     # Не прошло ли доступное время подтверждения? 
     if sign_up_buffer[username]["confirm_expires"] < datetime.now(timezone.utc):
-        Log("Late confirmation. Denied")
+        Log("Late confirmation. Denied\n\n")
         del sign_up_buffer[username]
         raise LATE_CONFIRM_EXCEPTION
     
@@ -143,13 +145,12 @@ def sign_up_confirm(
     # Создаем пользователя
     user_id = create_user(username, sign_up_buffer[username]["password_hash"], sign_up_buffer[username]["nickname"])
 
-    Log(f"User created (id = {user_id})")
+    Log(f"User created")
 
     # Создаем токен доступа
-    assecc_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user_id}, expires_delta=assecc_token_expires)
+    access_token = create_access_token(data={"sub": user_id})
 
-    Log(f"Token created with params: data(user_id={user_id}) token_expires({ACCESS_TOKEN_EXPIRE_MINUTES})")
+    Log(f"Token created with params (user_id={user_id})")
 
     del sign_up_buffer[username]
 

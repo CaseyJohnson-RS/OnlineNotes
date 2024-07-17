@@ -5,13 +5,21 @@
 from .config import LOGGING, LOG_FILE_PATH
 from datetime import datetime
 
-def Log(s: str):
+def LogTime():
 
     if LOGGING:
         now = datetime.now()
 
         file = open(LOG_FILE_PATH, 'a')
-        file.write(str(now) + ": " + s + '\n')
+        file.write('\n' + str(now) + ": \n")
+        file.close()
+
+def Log(s: str):
+
+    if LOGGING:
+
+        file = open(LOG_FILE_PATH, 'a')
+        file.write(str(s) + '\n')
         file.close()
 
 routers = []
