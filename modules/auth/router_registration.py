@@ -32,7 +32,7 @@ sign_up_buffer = { }
 
 # Вспомогательная функция для фронта
 # Чтобы заранее чекать, есть ли пользователь с подобным логином
-@router.post("/username-exist")
+@router.post("/username-exist", tags=["Authorization"])
 def check_username_exist(
         username: Annotated[EmailStr, Query(
             title="Логин",
@@ -48,7 +48,7 @@ def check_username_exist(
 
 
 # Регистрация с последующим подтверждением почты (см. /sign-up-confirm)
-@router.post("/sign-up")
+@router.post("/sign-up", tags=["Authorization"])
 def sign_up(
         username: Annotated[EmailStr, Form(
             title="Логин",
@@ -102,7 +102,7 @@ def sign_up(
 
 
 # Подтверждение регистрации
-@router.post("/sign-up-confirm")
+@router.post("/sign-up-confirm", tags=["Authorization"])
 def sign_up_confirm(
         username: Annotated[EmailStr, Form(
             title="Логин",
