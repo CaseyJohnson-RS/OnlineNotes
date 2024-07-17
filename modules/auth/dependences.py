@@ -4,7 +4,7 @@ from common.schemas import User
 from .exceptions import CREDENTIALS_EXCEPTION, INACTIVE_USER_EXCEPTION
 from .config import ALGORITHM
 from .constants import SECRET_KEY
-from ..database.crud import get_user_by_id
+from ..database.crud import get_user
 from ..logging.main import Log
 
 from fastapi.security import OAuth2PasswordBearer
@@ -36,7 +36,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
 
         raise CREDENTIALS_EXCEPTION
     
-    user = get_user_by_id(user_id)
+    user = get_user(user_id)
     
     return user
 

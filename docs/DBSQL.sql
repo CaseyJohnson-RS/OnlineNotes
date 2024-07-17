@@ -192,7 +192,6 @@ BEFORE INSERT ON "Notes"
 FOR EACH ROW EXECUTE FUNCTION set_note_id();
 
 CREATE UNIQUE INDEX email_idx ON "Users" (email);
-CREATE UNIQUE INDEX note_idx ON "Notes" (user_id) INCLUDE (note_id);
 
 INSERT INTO "Roles" (role_name) VALUES ('user');
 INSERT INTO "Roles" (role_name) VALUES ('admin');

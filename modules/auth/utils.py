@@ -7,7 +7,7 @@ import smtplib
 from email.message import EmailMessage
 import ssl
 
-from ..database.crud import get_password_hash_by_username, get_user_id_by_username, add_user
+from ..database.crud import get_user_password_hash, get_user_id, add_user
 from .config import ALGORITHM, EMAIL_SENDER_ADDRESS, EMAIL_SENDER_PASSWORD
 from .constants import SECRET_KEY
 
@@ -32,7 +32,7 @@ def verify_password(plain_password, hashed_password):
 def authenticate_user(username: str, password: str) -> int | None:
     
     # Получение хеша пароля пользователя
-    hashed_password = get_password_hash_by_username(username)
+    hashed_password = get_user_password_hash(username)
 
     # Если пользователя в базе не было, то верхний уровень вернет ошибку
     if not hashed_password:
@@ -45,7 +45,7 @@ def authenticate_user(username: str, password: str) -> int | None:
         return None
 
     # Возвращаем id пользователя
-    return get_user_id_by_username(username)
+    return get_user_id(username)
 
 
 # Создание токена доступа (чтобы не пришлось каждый раз вводить логин и пароль)
@@ -75,7 +75,7 @@ def get_number_sequence(length: int) -> str:
 
 # Проверка: находится ли логин в базе данных
 def check_username_already_exists(username: str) -> bool:
-    if get_user_id_by_username(username):
+    if get_user_id(username):
         return True
     return False
 
@@ -101,12 +101,12 @@ def send_sequence_to_email(sequence:str, email: str) -> bool:
     msg['From'] = EMAIL_SENDER_ADDRESS
     msg['To'] = email
     msg.set_content(
-        f""" 
+f""" 
 Hello! Thank you joining us!
 
 Your confirm code: 
 {sequence}
-        """)
+""")
     
     context = ssl.create_default_context()
 

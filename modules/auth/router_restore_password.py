@@ -7,7 +7,7 @@ from .config import RESTORE_CONFIRM_EXPIRE_MINUTES, NEW_PASSWORD_WAIT_EXPIRE_MIN
 from .schemas import Token
 
 from modules.logging.main import Log
-from modules.database.crud import update_password_hash, get_user_id_by_username
+from modules.database.crud import update_password_hash, get_user_id
 
 from fastapi import APIRouter, Form, BackgroundTasks
 
@@ -19,7 +19,7 @@ restore_confirm_buffer = {}
 set_new_password_buffer = {}
 
 
-@router.post("/restore-password", tags=["Authorization"])
+@router.post("/restore-password", tags=["Authorization", "Restore password"])
 def restore_password_by_email(
     username: Annotated[str, Form()],
     bgtasks: BackgroundTasks
@@ -40,7 +40,7 @@ def restore_password_by_email(
     return True
 
 
-@router.post("/restore-password-confirm", tags=["Authorization"])
+@router.post("/restore-password-confirm", tags=["Authorization", "Restore password"])
 def confirm_password_restore(
     username: Annotated[str, Form()],
     confirm_seq: Annotated[str, Form(
@@ -74,7 +74,7 @@ def confirm_password_restore(
     return True
 
 
-@router.post("/set-new-password", tags=["Authorization"])
+@router.post("/set-new-password", tags=["Authorization", "Restore password"])
 def set_new_password_for_user(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()]
@@ -92,9 +92,9 @@ def set_new_password_for_user(
         raise LATE_RESTORE_EXCEPTION
 
     password_hash = get_password_hash(password=password)
-    user_id = get_user_id_by_username(username=username)
+    user_id = get_user_id(username)
 
-    update_password_hash(username=username, password_hash=password_hash)
+    update_password_hash(username, password_hash=password_hash)
 
     # Создаем токен доступа
     assecc_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
