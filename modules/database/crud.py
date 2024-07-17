@@ -112,6 +112,21 @@ def add_user(username: str, password_hash: str, nickname: str, active: bool, rol
 
     return cursor.fetchone()["id"]
 
+
+@DBSession
+def update_password_hash(username: str, password_hash:str, cursor):
+
+    query = """
+        UPDATE "Users" SET password_hash = %s WHERE email = %s;
+    """
+
+    query_values = (password_hash, username)
+
+    cursor.execute(query, query_values)
+    connection.commit()
+
+    
+
 """
 @DBSession
 def p(cursor):

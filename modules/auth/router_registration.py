@@ -12,7 +12,7 @@ from .exceptions import USERNAME_EXISTS_EXCEPTION, \
     LATE_CONFIRM_EXCEPTION, \
     BAD_CONFIRMATION_EXCEPTION, \
     WRONG_CONFIRMATION_EXCEPTION
-from .config import CONFIRMATION_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
+from .config import REGIST_CONFIRM_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
 from .schemas import Token
 from modules.logging.main import Log
 
@@ -48,7 +48,7 @@ def check_username_exist(
 
 
 # Регистрация с последующим подтверждением почты (см. /sign-up-confirm)
-@router.post("/sign-up", tags=["Authorization"])
+@router.post("/sign-up", tags=["Registration"])
 def sign_up(
         username: Annotated[EmailStr, Form(
             title="Логин",
@@ -93,16 +93,16 @@ def sign_up(
         "nickname": nickname,
         "password_hash": hashed_password,
         "confirm_sequence": confirm_sequence,
-        "confirm_expires": datetime.now(timezone.utc) + timedelta(minutes=CONFIRMATION_EXPIRE_MINUTES)
+        "confirm_expires": datetime.now(timezone.utc) + timedelta(minutes=REGIST_CONFIRM_EXPIRE_MINUTES)
     }
 
-    Log(f"Waiting for confirmation within {CONFIRMATION_EXPIRE_MINUTES} minutes...")
+    Log(f"Waiting for confirmation within {REGIST_CONFIRM_EXPIRE_MINUTES} minutes...")
 
     return True
 
 
 # Подтверждение регистрации
-@router.post("/sign-up-confirm", tags=["Authorization"])
+@router.post("/sign-up-confirm", tags=["Registration"])
 def sign_up_confirm(
         username: Annotated[EmailStr, Form(
             title="Логин",

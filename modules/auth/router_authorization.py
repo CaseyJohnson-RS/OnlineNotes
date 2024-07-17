@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends
 router = APIRouter()
 
 # Авторизация
-@router.post("/token", tags=["Authorization"])
+@router.post("/token", tags=["Authorization", "token"])
 def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
 
     """
