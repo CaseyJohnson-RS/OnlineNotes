@@ -17,13 +17,3 @@ class Note(BaseModel):
     text: Annotated[str | None, Field()]
     hex_color: Annotated[str | None, Field()]
     status: Annotated[str | None, Field()]
-
-
-class UserOut(BaseModel):
-    id: Annotated[int, Field()]
-    nickname: Annotated[str, Field()]  
-    username: Annotated[EmailStr, Field()]
-    avatar: Annotated[str, Field()]
-    role: Annotated[str, Field()]
-    active: Annotated[bool, Field(default=True)]
-    labels: Annotated[list[str], Field()]

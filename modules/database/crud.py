@@ -269,3 +269,11 @@ def update_note_in_db(user_id: int, note: Note, cursor) -> bool:
         return False
     
     return True
+
+@DBSession
+def delete_note_in_db(user_id: int, note: int) -> bool:
+
+    query = """
+        DELETE FROM "Notes"
+        WHERE user_id = %s AND note_id = %s
+    """
