@@ -48,7 +48,7 @@ def restore_password_by_username(
     return True
 
 
-@router.post("/restore-password-confirm", tags=["Authorization", "Restore password"])
+@router.post("/restore-password-confirm", tags=["Restore password"])
 def confirm_password_restore(
     username: Annotated[str, Form()],
     confirm_seq: Annotated[str, Form(
@@ -87,7 +87,7 @@ def confirm_password_restore(
     return True
 
 
-@router.post("/set-new-password", tags=["Authorization", "Restore password"])
+@router.post("/set-new-password", tags=["Restore password"])
 def set_new_password_for_user(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()]

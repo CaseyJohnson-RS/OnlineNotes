@@ -1,7 +1,7 @@
 
 
 from .main import send_query, send_fetch_query
-from common.schemas import User, Note
+from common.schemas import User, Note, NoteShort
 
 # В свое оправдание скажу, что базы данных проектировать я не умел до того
 # Как начал этот проект. И осуждать меня за этот плохой API взаимодействия
@@ -145,13 +145,16 @@ def convert_note_status(note_status_name_or_id: int | str) -> int | str | None:
     return data and data[key]
 
 
-def get_note(user_id: int, note_id: int) -> Note:
+def get_note_from_db(user_id: int, note_id: int) -> Note | None:
 
     query = """SELECT * FROM "Notes" WHERE user_id = %s AND note_id = %s"""
     query_value = (user_id, note_id)
 
     note_data = send_fetch_query(query, query_value, 'one')
     note_status = convert_note_status(note_data["status"])
+
+    if note_data is None: 
+        return None
     
     note = Note(
         note_id=note_id,
@@ -162,6 +165,24 @@ def get_note(user_id: int, note_id: int) -> Note:
     )
 
     return note
+
+
+def get_note_labels(user_id: int, note_id: int) -> list[str]:
+
+    query = """SELECT * FROM "Note_assigned_labels" WHERE user_id = %s AND note_id = %s"""
+    query_value = (user_id, note_id)
+
+    data_list = send_fetch_query(query, query_value, 'all')
+
+    if data_list is None:
+        return []
+
+    label_list = []
+
+    for row in data_list:
+        label_list.append(row["label"])
+    
+    return label_list
 
 
 def update_note_in_db(user_id: int, note: Note) -> bool:
@@ -190,6 +211,7 @@ def delete_note_in_db(user_id: int, note_id: int) -> bool:
 
     return send_query(query, query_values)
 
+
 def clear_note_labels_from_db(user_id: int, note_id: int) -> bool:
 
     query = """
@@ -199,3 +221,114 @@ def clear_note_labels_from_db(user_id: int, note_id: int) -> bool:
     query_values = (user_id, note_id)
     
     return send_query(query, query_values)
+
+
+def get_note_shorts_by_filter(
+        user_id: int, 
+        label: str | None = None,
+        status: str | None = None
+    ) -> list[NoteShort] | None:
+
+    query = """
+        SELECT n.note_id, n.header, n.hex_color FROM "Notes" n
+            LEFT JOIN "Note_assigned_labels" l ON n.user_id = l.user_id AND n.note_id = l.note_id
+            LEFT JOIN "Note_status" s ON n.status = s.id
+            WHERE n.user_id = %s"""
+    
+    query_values = [user_id]
+
+    if not label is None:
+        query += " AND l.label = %s"
+        query_values.append(label)
+    
+    if not status is None:
+        query += " AND s.title = %s"
+        query_values.append(status)
+
+    notes_data = send_fetch_query(query, tuple(query_values), fetch_type='all')
+ 
+    if notes_data is None:
+        return None
+    
+    notes = []
+
+    for note_data in notes_data:
+
+        print(note_data)
+
+        note = NoteShort(
+            note_id=note_data["note_id"],
+            header=note_data["header"],
+            hex_color = note_data["hex_color"],
+        )
+
+        notes.append(note)
+    
+    return notes
+
+
+def set_label_to_note_in_db(user_id: int, note_id: int, label: str) -> bool:
+
+    query = """
+        INSERT INTO "Note_assigned_labels" (user_id, note_id, label)
+        VALUES (%s,%s,%s)
+    """
+    query_values = (user_id, note_id, label)
+
+    return send_query(query, query_values)
+
+
+def unset_label_to_note_in_db(user_id: int, note_id: int, label: str) -> bool:
+
+    query = """
+        DELETE FROM "Note_assigned_labels"
+        WHERE user_id = %s AND note_id = %s AND label = %s
+    """
+    query_values = (user_id, note_id, label)
+
+    return send_query(query, query_values)
+
+
+def create_user_label_db(user_id: int, label: str) -> bool:
+
+    query = """
+        INSERT INTO "User_note_labels" (user_id, label)
+        VALUES (%s, %s);
+    """
+    query_values = (user_id, label)
+
+    return send_query(query, query_values)
+
+
+def delete_user_label_db(user_id: int, label: str) -> bool:
+
+    query_clear_notes_labels = """
+        DELETE FROM "Note_assigned_labels"
+        WHERE user_id = %s AND label = %s
+    """
+
+    query_delete_label = """
+        DELETE FROM "User_note_labels"
+        WHERE user_id = %s AND label = %s
+    """
+    query_values = (user_id, label)
+
+    return send_query(query_clear_notes_labels, query_values) and send_query(query_delete_label, query_values)
+
+
+def get_all_user_labels(user_id: int) -> list[str]:
+
+    query = """
+        SELECT * FROM "User_note_labels"
+        WHERE user_id = %s;
+    """
+    query_values = (user_id,)
+
+    data_list = send_fetch_query(query, query_values, 'all')
+
+    if data_list is None:
+        return []
+
+    label_list = [row["label"] for row in data_list]
+
+    return label_list

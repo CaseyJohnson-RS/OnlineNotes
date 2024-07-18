@@ -3,8 +3,8 @@ from fastapi import FastAPI
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Тут твой код
 
-from modules.auth import main as m_auth
 from modules.logging import main as m_logging
+from modules.auth import main as m_auth
 from modules.notesAPI import main as m_notesAPI
 
 def initialize(app: FastAPI):

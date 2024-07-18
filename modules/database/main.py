@@ -9,14 +9,24 @@ from psycopg2.extras import RealDictCursor
 
 connection = None
 
-try:
-    # пытаемся подключиться к базе данных
-    connection = psycopg2.connect(DATABASE_URI)
-except Exception as e:
+
+def DBConnect():
+    global connection
+
     LogTime()
-    Log("DataBase Exception. Can`t establish connection to database: " + str(e))
-   
-    print('Can`t establish connection to database')
+
+    if not connection is None:
+        connection.close()
+
+    Log('Connect database...')
+
+    try:
+        # пытаемся подключиться к базе данных
+        connection = psycopg2.connect(DATABASE_URI)
+    except Exception as e:
+
+        Log('Can`t establish connection to database')
+
 
 def DBSession(func):
     
@@ -35,8 +45,12 @@ def send_fetch_query(query: str, query_values: tuple, fetch_type: str = 'one', c
     try:
         cursor.execute(query, query_values)
     except Exception as e:
+
         LogTime()
-        Log("\tDataBase Exception: " + str(e) + "\n")
+        Log("DataBase Exception: " + str(e))
+
+        DBConnect()
+
         return False
     
     result = None
@@ -64,10 +78,16 @@ def send_query(query: str, query_values: tuple, cursor=None) -> bool:
         connection.commit()
     except Exception as e:  
         LogTime()
-        Log("\tDataBase Exception: " + str(e) + "\n")
+        Log("DataBase Exception: " + str(e))
+
+        DBConnect()
+
         return False
      
     return True
+
+
+DBConnect()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

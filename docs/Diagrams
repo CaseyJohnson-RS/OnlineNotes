@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-17T10:05:22.454Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="DnnGqbxJcJSnohy4a8i2" version="24.6.5" type="device" pages="7">
+<mxfile host="app.diagrams.net" modified="2024-07-18T08:43:17.382Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="f_0-l4oQuh42sVyjaX6e" version="24.7.1" type="device" pages="7">
   <diagram id="9SpUD0K6ytqEF4HDE04U" name="Use">
-    <mxGraphModel dx="875" dy="503" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1050" dy="604" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -56,7 +56,7 @@
           <mxGeometry x="174.25" y="110" width="85.75" height="40" as="geometry" />
         </mxCell>
         <mxCell id="UfnBSSQF8-5jjVXMXVJ2-22" value="Заметки" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="67" y="730" width="697" height="330" as="geometry">
+          <mxGeometry x="67" y="730" width="697" height="260" as="geometry">
             <mxRectangle x="90" y="1400" width="90" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -72,7 +72,7 @@
         <mxCell id="UfnBSSQF8-5jjVXMXVJ2-6" value="Поиск заметок" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Courier New;sketch=1;curveFitting=1;jiggle=2;" parent="UfnBSSQF8-5jjVXMXVJ2-22" vertex="1">
           <mxGeometry x="558.5" y="50" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="UfnBSSQF8-5jjVXMXVJ2-14" value="- Добавить / удалить картинки&lt;div&gt;- Изменить ярлыки&lt;/div&gt;&lt;div&gt;- Архивировать / разархивировать&lt;/div&gt;&lt;div&gt;- Удалить в корзину / восстановить&lt;/div&gt;&lt;div&gt;- Удалить полностью&lt;/div&gt;&lt;div&gt;- Изменить цвет&lt;/div&gt;&lt;div&gt;- Очистить ярлыки заметки&lt;/div&gt;&lt;div&gt;- Сохранить заметку&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;NB: должна быть возможность выполнять некоторые функции над множеством заметок сразу&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="UfnBSSQF8-5jjVXMXVJ2-22" vertex="1">
+        <mxCell id="UfnBSSQF8-5jjVXMXVJ2-14" value="&lt;div&gt;- Изменить ярлыки&lt;/div&gt;&lt;div&gt;- Архивировать / разархивировать&lt;/div&gt;&lt;div&gt;- Удалить в корзину / восстановить&lt;/div&gt;&lt;div&gt;- Удалить полностью&lt;/div&gt;&lt;div&gt;- Изменить цвет&lt;/div&gt;&lt;div&gt;- Очистить ярлыки заметки&lt;/div&gt;&lt;div&gt;- Сохранить заметку&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="UfnBSSQF8-5jjVXMXVJ2-22" vertex="1">
           <mxGeometry x="138.5" y="140" width="255" height="170" as="geometry" />
         </mxCell>
         <mxCell id="UfnBSSQF8-5jjVXMXVJ2-27" value="Настройки" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -93,14 +93,11 @@
         <mxCell id="L9y8X5htxE__1M-ijmZH-1" value="Профиль" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="10" y="530" width="280" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="m89kUXP3RTlvCvgX7oLo-3" value="Сменить аватар" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Courier New;sketch=1;curveFitting=1;jiggle=2;" parent="L9y8X5htxE__1M-ijmZH-1" vertex="1">
-          <mxGeometry x="160" y="30" width="110" height="70" as="geometry" />
-        </mxCell>
         <mxCell id="m89kUXP3RTlvCvgX7oLo-2" value="Сменить пароль" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Courier New;sketch=1;curveFitting=1;jiggle=2;" parent="L9y8X5htxE__1M-ijmZH-1" vertex="1">
-          <mxGeometry x="10" y="30" width="110" height="70" as="geometry" />
+          <mxGeometry x="10" y="50" width="110" height="70" as="geometry" />
         </mxCell>
         <mxCell id="m89kUXP3RTlvCvgX7oLo-4" value="Сменить ник" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Courier New;sketch=1;curveFitting=1;jiggle=2;" parent="L9y8X5htxE__1M-ijmZH-1" vertex="1">
-          <mxGeometry x="92.5" y="100" width="105" height="60" as="geometry" />
+          <mxGeometry x="150" y="55" width="105" height="60" as="geometry" />
         </mxCell>
         <mxCell id="3Co3h1pRvo-QK49wmrXZ-8" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontFamily=Courier New;sketch=1;curveFitting=1;jiggle=2;gradientColor=none;" parent="1" vertex="1">
           <mxGeometry x="1260" y="138" width="30" height="60" as="geometry" />
@@ -111,7 +108,7 @@
         <mxCell id="3Co3h1pRvo-QK49wmrXZ-11" value="Просмотреть список пользователей" style="ellipse;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fontFamily=Courier New;" parent="3Co3h1pRvo-QK49wmrXZ-10" vertex="1">
           <mxGeometry x="20" y="40" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="3Co3h1pRvo-QK49wmrXZ-12" value="Смениить аватар пользователя" style="ellipse;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fontFamily=Courier New;" parent="3Co3h1pRvo-QK49wmrXZ-10" vertex="1">
+        <mxCell id="3Co3h1pRvo-QK49wmrXZ-12" value="Сменить аватар пользователя" style="ellipse;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fontFamily=Courier New;" parent="3Co3h1pRvo-QK49wmrXZ-10" vertex="1">
           <mxGeometry x="20" y="130" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="3Co3h1pRvo-QK49wmrXZ-13" value="Сменить пароль пользователя" style="ellipse;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fontFamily=Courier New;" parent="3Co3h1pRvo-QK49wmrXZ-10" vertex="1">

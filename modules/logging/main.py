@@ -10,8 +10,11 @@ def LogTime():
     if LOGGING:
         now = datetime.now()
 
+        msg = '\n' + str(now)
+
         file = open(LOG_FILE_PATH, 'a')
-        file.write('\n' + str(now) + ": \n")
+        file.write(msg + '\n')
+        print(msg)
         file.close()
 
 def Log(s: str):
@@ -20,9 +23,13 @@ def Log(s: str):
 
         file = open(LOG_FILE_PATH, 'a')
         file.write(str(s) + '\n')
+        print(str(s))
         file.close()
 
 routers = []
+
+LogTime()
+Log("Start logging")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

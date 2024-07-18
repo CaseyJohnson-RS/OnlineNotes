@@ -11,9 +11,18 @@ class User(BaseModel):
     role: Annotated[str, Field()]
 
 
-class Note(BaseModel):
+class NoteShort(BaseModel):
     note_id: int
-    header: Annotated[str | None, Field()]
-    text: Annotated[str | None, Field()]
-    hex_color: Annotated[str | None, Field()]
-    status: Annotated[str | None, Field()]
+    header: Annotated[str | None, Field()] = None
+    hex_color: Annotated[str | None, Field()] = None
+
+
+class Note(NoteShort):
+    text: Annotated[str | None, Field()] = None
+    status: Annotated[str | None, Field()] = None
+
+
+class NoteLabeled(Note):
+    labels: Annotated[list[str], Field()] = []
+    
+    
