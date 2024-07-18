@@ -229,17 +229,21 @@ def get_note_shorts_by_filter(
         status: str | None = None
     ) -> list[NoteShort] | None:
 
-    query = """
-        SELECT n.note_id, n.header, n.hex_color FROM "Notes" n
-            LEFT JOIN "Note_assigned_labels" l ON n.user_id = l.user_id AND n.note_id = l.note_id
-            LEFT JOIN "Note_status" s ON n.status = s.id
-            WHERE n.user_id = %s"""
-    
+    query = ""
     query_values = [user_id]
 
     if not label is None:
-        query += " AND l.label = %s"
+        query = """
+            SELECT n.note_id, n.header, n.hex_color FROM "Note_assigned_labels" l 
+                LEFT JOIN "Notes" n ON n.user_id = l.user_id AND n.note_id = l.note_id
+                LEFT JOIN "Note_status" s ON n.status = s.id
+                WHERE n.user_id = %s AND l.label = %s"""
         query_values.append(label)
+    else:
+        query = """
+            SELECT n.note_id, n.header, n.hex_color FROM "Notes" n 
+                LEFT JOIN "Note_status" s ON n.status = s.id
+                WHERE n.user_id = %s"""     
     
     if not status is None:
         query += " AND s.title = %s"
@@ -332,3 +336,121 @@ def get_all_user_labels(user_id: int) -> list[str]:
     label_list = [row["label"] for row in data_list]
 
     return label_list
+
+# - - - - - - - - - - - - Profile API  - - - - - - - - - - - -
+
+def update_user(
+        user_id: int, 
+        email: str | None = None,
+        nickname: str | None = None,
+        password_hash: str | None = None,
+        active: bool | None = None,
+        role_name: str | None = None
+) -> bool:
+
+    query = """UPDATE "Users" SET """
+    query_values = []
+
+    comma_check = False
+
+    if not email is None:
+        comma_check = True
+        query += "email = %s "
+        query_values.append(email)
+
+        subquery_values = (email,)
+
+        subquery = """UPDATE "Error_messages" SET email = %s WHERE email = %s;"""
+        if not send_query(subquery, subquery_values):
+            return False
+    
+        subquery = """UPDATE "Reviews" SET email = %s WHERE email = %s;"""
+        if not send_query(subquery, subquery_values):
+            return False
+    
+    if not nickname is None:
+        query += (',' if comma_check else '') + "nickname = %s "
+        query_values.append(nickname)
+    
+    if not password_hash is None:
+        query += (',' if comma_check else '') + "password_hash = %s "
+        query_values.append(password_hash)
+    
+    if not active is None:
+        query += (',' if comma_check else '') + "active = %s "
+        query_values.append(active)
+    
+    if not role_name is None:
+        query += (',' if comma_check else '') + "role = %s "
+        query_values.append(convert_role(role_name))
+    
+    query += " WHERE id=%s;"
+    query_values.append(user_id)
+
+    return send_query(query, query_values)
+
+
+def delete_all_user_labels(user_id: int) -> bool:
+
+    query = """
+        DELETE FROM "User_note_labels"
+        WHERE user_id = %s;
+    """
+    query_values = (user_id,)
+
+    return send_query(query, query_values)
+
+
+def clear_labels_from_all_notes(user_id: int) -> bool:
+
+    query = """
+        DELETE FROM "Note_assigned_labels"
+        WHERE user_id = %s;
+    """
+    query_values = (user_id,)
+
+    return send_query(query, query_values)
+
+
+def deleta_all_user_notes(user_id: int) -> bool:
+
+    query = """
+        DELETE FROM "Notes"
+        WHERE user_id = %s;
+    """
+    query_values = (user_id,)
+
+    return send_query(query, query_values)
+
+
+def delete_user(user_id: int) -> bool:
+
+    query = """
+        DELETE FROM "Users"
+        WHERE id = %s;
+    """
+    query_values = (user_id,)
+
+    return send_query(query, query_values)
+
+
+def add_bug_report(email: str, text: str) -> bool:
+
+    query = """
+        INSERT INTO "Error_messages" (email, text)
+        VALUES (%s, %s);
+    """
+    query_values = (email, text)
+
+    return send_query(query, query_values)
+
+
+def add_review(email: str, rating: int, text: str) -> bool:
+
+    query = """
+        INSERT INTO "Reviews" (email, rating, text)
+        VALUES (%s, %s, %s);
+    """
+    query_values = (email, rating, text)
+
+    return send_query(query, query_values)

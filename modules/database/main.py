@@ -89,6 +89,8 @@ def send_query(query: str, query_values: tuple, cursor=None) -> bool:
 
 DBConnect()
 
+router = []
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def shutdown():

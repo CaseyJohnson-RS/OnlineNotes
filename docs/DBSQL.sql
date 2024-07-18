@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS public."User_note_labels"
     user_id bigint,
     label character varying(16),
     PRIMARY KEY (user_id, label),
-    UNIQUE (label)
 );
 
 CREATE TABLE IF NOT EXISTS public."Notes"
@@ -80,21 +79,6 @@ CREATE TABLE IF NOT EXISTS public."Note_assigned_labels"
 ALTER TABLE IF EXISTS public."Users"
     ADD FOREIGN KEY (role_id)
     REFERENCES public."Roles" (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-ALTER TABLE IF EXISTS public."Error_messages"
-    ADD CONSTRAINT "Every message must have an author" FOREIGN KEY (email)
-    REFERENCES public."Users" (email) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public."Reviews"
-    ADD CONSTRAINT "Every review must have an author" FOREIGN KEY (email)
-    REFERENCES public."Users" (email) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;

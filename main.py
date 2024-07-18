@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from modules.logging import main as m_logging
 from modules.auth import main as m_auth
 from modules.notesAPI import main as m_notesAPI
+from modules.profileAPI import main as m_profileAPI
 
 def initialize(app: FastAPI):
 
@@ -13,6 +14,7 @@ def initialize(app: FastAPI):
     routers += m_auth.routers
     routers += m_logging.routers
     routers += m_notesAPI.routers
+    routers += m_profileAPI.routers
 
     for router in routers:
         app.include_router(router)
