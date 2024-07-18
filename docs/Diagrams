@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-07-18T13:18:45.555Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="egnwivTgAZXKczt7qZRE" version="24.7.1" type="device" pages="7">
+<mxfile host="app.diagrams.net" modified="2024-07-18T14:00:02.758Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="bROJWaMtXOpUsT_-q7GQ" version="24.7.1" type="device" pages="7">
   <diagram id="9SpUD0K6ytqEF4HDE04U" name="Use">
     <mxGraphModel dx="724" dy="417" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
@@ -132,7 +132,7 @@
         <mxCell id="3Co3h1pRvo-QK49wmrXZ-19" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Система ролей&lt;/h1&gt;&lt;p&gt;На начальном этапе предполагается, что существуют пользователи и один администратор. Вдальнейшем могут добавиться суперпользователи, которые смогут читать отзывы о приложении и сообщения об ошибках.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="30" y="10" width="360" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="iBQLeDoVJCxvGVng2184-1" value="Просмотреть список пользователей&lt;div&gt;Заблокировать / восстановить пользователя&lt;/div&gt;&lt;div&gt;Удалить пользователя&lt;/div&gt;&lt;div&gt;Сменить пароль пользователя&lt;/div&gt;&lt;div&gt;Сменить почту пользователя&lt;/div&gt;&lt;div&gt;- - - - -&lt;/div&gt;&lt;div&gt;Просмотреть сообщения об ошибках&lt;/div&gt;&lt;div&gt;Просмотреть отзывы&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="iBQLeDoVJCxvGVng2184-1" value="Просмотреть данные любого пользователя&lt;div&gt;Заблокировать / восстановить пользователя&lt;/div&gt;&lt;div&gt;Удалить пользователя&lt;/div&gt;&lt;div&gt;Сменить пароль пользователя&lt;/div&gt;&lt;div&gt;Сменить почту пользователя&lt;/div&gt;&lt;div&gt;- - - - -&lt;/div&gt;&lt;div&gt;Просмотреть сообщения об ошибках&lt;/div&gt;&lt;div&gt;Просмотреть отзывы&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1500" y="280" width="300" height="120" as="geometry" />
         </mxCell>
       </root>

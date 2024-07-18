@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, EmailStr
 class User(BaseModel):
     id: Annotated[int, Field()]
     email: Annotated[EmailStr, Field()]
-    password_hash: Annotated[str, Field()]
+    nickname: Annotated[str | None, Field()] = None
     active: Annotated[bool, Field(default=True)]
     role: Annotated[str, Field()]
 
@@ -26,3 +26,14 @@ class NoteLabeled(Note):
     labels: Annotated[list[str], Field()] = []
     
     
+class Error_message(BaseModel):
+    id: int
+    author_email: EmailStr
+    text: str
+
+
+class Review(BaseModel):
+    id: int
+    rating: int
+    author_email: EmailStr
+    text: str

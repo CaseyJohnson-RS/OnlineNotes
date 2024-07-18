@@ -1,7 +1,6 @@
 
-
 from .main import send_query, send_fetch_query
-from common.schemas import User, Note, NoteShort
+from common.schemas import User, Note, NoteShort, Error_message, Review
 
 # В свое оправдание скажу, что базы данных проектировать я не умел до того
 # Как начал этот проект. И осуждать меня за этот плохой API взаимодействия
@@ -69,7 +68,7 @@ def get_user(user_id_or_name: str | int) -> User | None:
     user = User(
         id = user_data["id"],
         email = user_data["email"],
-        password_hash = user_data["password_hash"],
+        nickname = user_data["nickname"],
         active = user_data["active"],
         role = role_name
     )
@@ -216,7 +215,7 @@ def clear_note_labels_from_db(user_id: int, note_id: int) -> bool:
 
     query = """
         DELETE FROM "Note_assigned_labels"
-        WHERE user_id = %s AND note_id = %s
+        WHERE user_id = %s AND note_id = %s 
     """
     query_values = (user_id, note_id)
     
@@ -249,6 +248,8 @@ def get_note_shorts_by_filter(
         query += " AND s.title = %s"
         query_values.append(status)
 
+    query += " ORDER BY n.note_id DESC"
+
     notes_data = send_fetch_query(query, tuple(query_values), fetch_type='all')
  
     if notes_data is None:
@@ -257,8 +258,6 @@ def get_note_shorts_by_filter(
     notes = []
 
     for note_data in notes_data:
-
-        print(note_data)
 
         note = NoteShort(
             note_id=note_data["note_id"],
@@ -358,7 +357,7 @@ def update_user(
         query += "email = %s "
         query_values.append(email)
 
-        subquery_values = (email,)
+        subquery_values = (email,email)
 
         subquery = """UPDATE "Error_messages" SET email = %s WHERE email = %s;"""
         if not send_query(subquery, subquery_values):
@@ -454,3 +453,56 @@ def add_review(email: str, rating: int, text: str) -> bool:
     query_values = (email, rating, text)
 
     return send_query(query, query_values)
+
+
+# - - - - - - - - - - - - Admin API  - - - - - - - - - - - -
+
+def get_error_messages(offset: int = 0, limit: int = 10) -> list[Error_message]:
+
+    query = """SELECT * FROM "Error_messages" ORDER BY id DESC LIMIT %s OFFSET %s;"""
+    query_values = (limit, offset )
+
+    data_list = send_fetch_query(query, query_values, 'all')
+
+    if data_list is None:
+        return []
+    
+    msg_list = []
+    
+    for row in data_list:
+
+        msg = Error_message(
+            id=row["id"],
+            author_email=row["email"],
+            text=row["text"]
+        )
+
+        msg_list.append(msg)
+
+    return msg_list
+
+
+def get_reviews(offset: int = 0, limit: int = 10) -> list[Review]:
+
+    query = """SELECT * FROM "Reviews" ORDER BY id DESC LIMIT %s OFFSET %s"""
+    query_values = (limit, offset )
+
+    data_list = send_fetch_query(query, query_values, 'all')
+
+    if data_list is None:
+        return []
+    
+    msg_list = []
+    
+    for row in data_list:
+
+        msg = Review(
+            id=row["id"],
+            rating=row["rating"],
+            author_email=row["email"],
+            text=row["text"]
+        )
+
+        msg_list.append(msg)
+
+    return msg_list
