@@ -1,49 +1,57 @@
-from dotenv import load_dotenv
-# Подгружаем переменные среды
-load_dotenv()
+from dotenv import load_dotenv; load_dotenv();
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+from modules import auth 
+from modules import notesAPI 
+from modules import profileAPI
+from modules import adminAPI
 
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Тут твой код
 
-from modules.logging import main as m_logging
-from modules.auth import main as m_auth
-from modules.notesAPI import main as m_notesAPI
-from modules.profileAPI import main as m_profileAPI
-from modules.adminAPI import main as m_adminAPI
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+description = """
+Writers' Favorite App 🖊️
 
-def initialize(app: FastAPI):
+This is the interface for the user part of the application.
 
-    routers = []
-    routers += m_auth.routers
-    routers += m_logging.routers
-    routers += m_notesAPI.routers
-    routers += m_profileAPI.routers
-    routers += m_adminAPI.routers
+Application features:
 
-    for router in routers:
-        app.include_router(router)
+ - Authorization
+ - Adding notes
+ - Adding shortcuts to notes
+ - Archiving
+ - etc.
+"""
 
+title="Online Notes"
+version="0.0.1"
+contact={
+    "name": "Casey Johnson",
+    "email": "sharus.programmer@gmail.com",
+}
+license_info={
+    "name": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+}
 
-def shutdown(app: FastAPI):
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-    m_auth.shutdown()
-    m_logging.shutdown()
-    
+app = FastAPI(
+    title=title,
+    description=description,
+    version=version,
+    contact=contact,
+    license_info=license_info,
+    docs_url="/documentation", 
+    redoc_url=None
+)
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+routers = []
+routers += auth.routers
+routers += notesAPI.routers
+routers += profileAPI.routers
+routers += adminAPI.routers
 
-    initialize(app)
-
-    yield
-
-    shutdown(app)
-
-app = FastAPI(lifespan=lifespan)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+for router in routers:
+    app.include_router(router)

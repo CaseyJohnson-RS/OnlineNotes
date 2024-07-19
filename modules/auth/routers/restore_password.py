@@ -1,12 +1,12 @@
 from typing import Annotated
 from datetime import datetime, timedelta, timezone
 
-from .utils import check_username_already_exists, send_sequence_to_email, get_number_sequence, get_password_hash, create_access_token
-from .exceptions import BAD_CONFIRMATION_EXCEPTION, LATE_CONFIRM_EXCEPTION, WRONG_CONFIRMATION_EXCEPTION, BAD_PASS_RESTORE_EXCEPTION, LATE_RESTORE_EXCEPTION
-from .config import RESTORE_CONFIRM_EXPIRE_MINUTES, NEW_PASSWORD_WAIT_EXPIRE_MINUTES
-from .schemas import Token
+from ..utils import check_username_already_exists, send_sequence_to_email, get_number_sequence, get_password_hash, create_access_token
+from ..exceptions import BAD_CONFIRMATION_EXCEPTION, LATE_CONFIRM_EXCEPTION, WRONG_CONFIRMATION_EXCEPTION, BAD_PASS_RESTORE_EXCEPTION, LATE_RESTORE_EXCEPTION
+from ..config import RESTORE_CONFIRM_EXPIRE_MINUTES, NEW_PASSWORD_WAIT_EXPIRE_MINUTES
+from ..schemas import Token
 
-from modules.logging.main import Log, LogTime
+from modules.logging import Log
 from modules.database.crud import update_password_hash, get_user_id
 
 from fastapi import APIRouter, Form, BackgroundTasks
@@ -25,7 +25,6 @@ def restore_password_by_username(
     bgtasks: BackgroundTasks
 ) -> bool:
     
-    LogTime()
     Log("Restore password request")
     
     if not check_username_already_exists(username=username):
@@ -56,7 +55,6 @@ def confirm_password_restore(
         )]
 ) -> bool:
     
-    LogTime()
     Log("Confirm password restore request")
     
     # Был ли пользователь в буфере восстановления пароля?
@@ -93,7 +91,6 @@ def set_new_password_for_user(
     password: Annotated[str, Form()]
 ) -> Token:
     
-    LogTime()
     Log("Set new password request")
     
     # Был ли пользователь в буфере восстановления пароля?

@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from .schemas import Token
-from .utils import authenticate_user, create_access_token
-from .exceptions import UNAUTHORIZED_EXCEPTION
-from ..logging.main import Log, LogTime
+from ..schemas import Token
+from ..utils import authenticate_user, create_access_token
+from ..exceptions import UNAUTHORIZED_EXCEPTION
+from modules.logging import Log
 
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends
@@ -20,7 +20,6 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     Естественно возвращает ошибку, если логин и пароль были недействительными
     """
 
-    LogTime()
     Log(
         f"Authorization: request access token\n" +
         f"Username: {form_data.username}\n" + 

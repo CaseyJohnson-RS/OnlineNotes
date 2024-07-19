@@ -1,5 +1,5 @@
 
-from .main import send_query, send_fetch_query
+from . import send_query, send_fetch_query
 from common.schemas import User, Note, NoteShort, Error_message, Review
 
 # В свое оправдание скажу, что базы данных проектировать я не умел до того

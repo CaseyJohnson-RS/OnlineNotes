@@ -2,19 +2,19 @@ from typing import Annotated
 from datetime import datetime, timedelta, timezone
 from pydantic import EmailStr
 
-from .utils import check_username_already_exists, \
+from ..utils import check_username_already_exists, \
     get_password_hash, \
     get_number_sequence, \
     send_sequence_to_email, \
     create_user, \
     create_access_token
-from .exceptions import USERNAME_EXISTS_EXCEPTION, \
+from ..exceptions import USERNAME_EXISTS_EXCEPTION, \
     LATE_CONFIRM_EXCEPTION, \
     BAD_CONFIRMATION_EXCEPTION, \
     WRONG_CONFIRMATION_EXCEPTION
-from .config import REGIST_CONFIRM_EXPIRE_MINUTES
-from .schemas import Token
-from modules.logging.main import Log, LogTime
+from ..config import REGIST_CONFIRM_EXPIRE_MINUTES
+from ..schemas import Token
+from modules.logging import Log
 
 from fastapi import APIRouter, BackgroundTasks, Query, Form
 
@@ -73,7 +73,6 @@ def sign_up(
     Этот код нужно отправить вместе с логином на путь '/registration_confirm'
     """
 
-    LogTime()
     Log("Registration request")
     Log(f"Username: {username}")
     Log(f"Password: {password}")
@@ -122,7 +121,6 @@ def sign_up_confirm(
     Если всё впорядке, то создает пользователя и возвращает токен доступа
     """
 
-    LogTime()
     Log("Redistration confirm request")
 
     # Был ли пользователь в буфере регистрации?

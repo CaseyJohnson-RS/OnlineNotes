@@ -1,11 +1,9 @@
-# Этот файл и функция initialize должны присутствовать в каждом
-# Модуле для того, чтобы организовать единую точку входа
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 import psycopg2
 from .config import DATABASE_URI
-from modules.logging.main import LogTime, Log
+from modules.logging import Log
 from psycopg2.extras import RealDictCursor
+from psycopg2.extensions import cursor as Cursor
+
 
 connection = None
 
@@ -13,19 +11,18 @@ connection = None
 def DBConnect():
     global connection
 
-    LogTime()
-
     if not connection is None:
         connection.close()
 
-    Log('Connect database...')
+    Log("Connect database...")
 
     try:
-        # пытаемся подключиться к базе данных
         connection = psycopg2.connect(DATABASE_URI)
     except Exception as e:
-
-        Log('Can`t establish connection to database')
+        Log("Connection failed: " + str(e))
+        return 
+    
+    Log("Сonnection successful")
 
 
 def DBSession(func):
@@ -40,13 +37,12 @@ def DBSession(func):
 
 
 @DBSession
-def send_fetch_query(query: str, query_values: tuple, fetch_type: str = 'one', cursor=None) -> object:
+def send_fetch_query(query: str, query_values: tuple, fetch_type: str = 'one', cursor: Cursor = None) -> object:
 
     try:
         cursor.execute(query, query_values)
     except Exception as e:
 
-        LogTime()
         Log("DataBase Exception: " + str(e))
 
         DBConnect()
@@ -59,25 +55,17 @@ def send_fetch_query(query: str, query_values: tuple, fetch_type: str = 'one', c
         result = cursor.fetchone()
     elif fetch_type == 'all':
         result = cursor.fetchall()
-
-    if result == None:
-        LogTime()
-        Log("From DataBase Fetched 'None'. \nQuery:")
-        Log(query)
-        Log("Values:")
-        Log(query_values)
     
     return result
 
 
 @DBSession
-def send_query(query: str, query_values: tuple, cursor=None) -> bool:
+def send_query(query: str, query_values: tuple, cursor: Cursor = None) -> bool:
 
     try:
         cursor.execute(query, query_values)
         connection.commit()
     except Exception as e:  
-        LogTime()
         Log("DataBase Exception: " + str(e))
 
         DBConnect()
@@ -88,11 +76,3 @@ def send_query(query: str, query_values: tuple, cursor=None) -> bool:
 
 
 DBConnect()
-
-router = []
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-def shutdown():
-
-    connection.close()

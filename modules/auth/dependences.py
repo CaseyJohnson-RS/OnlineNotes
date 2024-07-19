@@ -5,7 +5,7 @@ from .exceptions import CREDENTIALS_EXCEPTION, INACTIVE_USER_EXCEPTION
 from .config import ALGORITHM
 from .constants import SECRET_KEY
 from ..database.crud import get_user
-from ..logging.main import Log
+from ..logging import Log
 
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
