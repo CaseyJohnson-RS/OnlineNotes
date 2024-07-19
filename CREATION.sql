@@ -150,3 +150,5 @@ INSERT INTO "Roles" (role_name) VALUES ('admin');
 INSERT INTO "Note_status" (title) VALUES ('active');
 INSERT INTO "Note_status" (title) VALUES ('archived');
 INSERT INTO "Note_status" (title) VALUES ('deleted');
+
+

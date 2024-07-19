@@ -1,7 +1,0 @@
-fastapi
-pydantic
-uvicorn
-python-multipart
-passlib
-pyjwt
-psycopg2
