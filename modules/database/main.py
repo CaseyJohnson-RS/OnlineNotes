@@ -51,7 +51,7 @@ def send_fetch_query(query: str, query_values: tuple, fetch_type: str = 'one', c
 
         DBConnect()
 
-        return False
+        return None
     
     result = None
 

@@ -150,11 +150,12 @@ def get_note_from_db(user_id: int, note_id: int) -> Note | None:
     query_value = (user_id, note_id)
 
     note_data = send_fetch_query(query, query_value, 'one')
-    note_status = convert_note_status(note_data["status"])
 
     if note_data is None: 
         return None
-    
+
+    note_status = convert_note_status(note_data["status"])
+
     note = Note(
         note_id=note_id,
         header=note_data["header"],

@@ -19,7 +19,7 @@ restore_confirm_buffer = {}
 set_new_password_buffer = {}
 
 
-@router.post("/restore-password", tags=["Authorization", "Restore password"])
+@router.post("/restore-password", tags=["Restore password"])
 def restore_password_by_username(
     username: Annotated[str, Form()],
     bgtasks: BackgroundTasks
