@@ -1,1 +1,0 @@
-DATABASE_URI = "postgresql://onlinenotes:OnlineNotes@localhost/onlinenotesdb"
