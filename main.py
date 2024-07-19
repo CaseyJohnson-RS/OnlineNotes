@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+# Подгружаем переменные среды
+load_dotenv()
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -8,6 +14,7 @@ from modules.auth import main as m_auth
 from modules.notesAPI import main as m_notesAPI
 from modules.profileAPI import main as m_profileAPI
 from modules.adminAPI import main as m_adminAPI
+
 
 def initialize(app: FastAPI):
 

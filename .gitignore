@@ -2,5 +2,4 @@
 .vscode
 .pytest_cache
 log.txt
-notes.txt
-/tests/config.py
+.env
