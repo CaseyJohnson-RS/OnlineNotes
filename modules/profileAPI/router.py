@@ -39,3 +39,8 @@ def post_review(
     text: Annotated[str, Body()]
 ) -> bool:
     return add_review(user.email, rating, text);
+
+
+@router.get("/profile-info", tags=["ProfileAPI"])
+def get_profile_information(user: Annotated[User, Depends(get_current_active_user)]) -> User:
+    return user;
