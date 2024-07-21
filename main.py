@@ -7,6 +7,7 @@ from modules import profileAPI
 from modules import adminAPI
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -47,6 +48,14 @@ app = FastAPI(
     redoc_url=None
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 routers = []
 routers += auth.routers
 routers += notesAPI.routers
@@ -55,3 +64,11 @@ routers += adminAPI.routers
 
 for router in routers:
     app.include_router(router)
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+app.get("/hi", tags=["Fun"])
+def return_hello():
+    return "Hello"
