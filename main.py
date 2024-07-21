@@ -69,6 +69,6 @@ for router in routers:
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
-app.get("/hi", tags=["Fun"])
+@app.get("/hi", tags=["Fun"])
 def return_hello():
     return "Hello"
