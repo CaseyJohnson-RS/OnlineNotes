@@ -14,61 +14,88 @@ let session_states = [
 ]
 
 let special_states = [
-    "server-error"
+    "checking-server",
+    "server-not-responding"
 ]
 
 let states = session_states + auth_states + special_states
 Object.freeze(states)
 
-let app_state = null
+let app_state = "checking-server"
 let token = null
+
+let initialized = false
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export function set_app_state(state)
 {
-    console.log("set_app_state(" + state + ")")
-    if (states.includes(state)) 
+    console.log("App state: " + state)
+    if (session_states.includes(state) || auth_states.includes(state)) 
     {
         app_state = state;
         localStorage["app_state"] = app_state;
     }
     else
-        console.log("State '" + state + "' is not registred!");
+        console.error("Setting state '" + state + "' is not alowed");
 }
+
 
 export function get_app_state() 
 { 
-    if (app_state === "server-error")
+    if (app_state !== null && states.includes(app_state))
         return app_state
-    
-    if (token === null)
-        set_app_state("authorization")
-    else
+
+    const storaged_state = localStorage.getItem("app_state")
+
+    if (token !== null)
     {
-        if (app_state !== null && !auth_states.includes(app_state))
-            return app_state
-
-        let saved_state = localStorage.getItem("app_state");
-
-        if (saved_state === null || auth_states.includes(saved_state))
-            set_app_state("main-page")
+        if (storaged_state === null || !session_states.includes(storaged_state))
+            app_state = "main-page"
+        else
+            app_state = storaged_state
+    } else
+    {
+        if (storaged_state === null || !auth_states.includes(storaged_state))
+            app_state = "authorization"
+        else
+            app_state = storaged_state
     }
+
+    set_app_state(app_state)
 
     return app_state
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-let server_is_ready = await check_server_connection()
-
-if (server_is_ready)
+export async function load_token()
 {
     token = await get_active_token()
 
     if (token === null)
-        console.log("No token. Need authrization...")
+        console.log("No token: need authrization")
     else 
-        console.log("Token is valid. Authorized")
+        console.log("Token is valid: authorized")
 }
-else set_app_state("server-error")
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+export async function initialize()
+{
+    if (initialized) return false;// Rerendering app flag
+
+    let is_server_ready = await check_server_connection();
+
+    console.log("Server connection: " + is_server_ready)
+
+    if (!is_server_ready) app_state = "server-not-responding";
+    else {
+        await load_token();
+        app_state = null;
+    }
+
+    initialized = true;
+    return true; // Rerendering app flag
+}

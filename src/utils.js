@@ -14,7 +14,7 @@ async function validate_token(token)
 
 export async function check_server_connection()
 {
-    return (await server_hi())
+    return (await server_hi()) // return bool
 }
 
 
