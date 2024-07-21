@@ -1,14 +1,15 @@
 import { get_app_state } from './appcontoller'
+import { Header } from './components/Header'
+
 
 function App() {
 
   let app_state = get_app_state()
 
-  console.log(app_state);
 
   return (
-    <div >
-
+    <div data-bs-theme="light">
+      <Header />
     </div>
   );
 }

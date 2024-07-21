@@ -1,4 +1,4 @@
-import { get_active_token } from './utils'
+import { get_active_token, check_server_connection } from './utils'
 
 let auth_states = [
     "authorization",
@@ -13,7 +13,11 @@ let session_states = [
     "main-page",
 ]
 
-let states = session_states + auth_states
+let special_states = [
+    "server-error"
+]
+
+let states = session_states + auth_states + special_states
 Object.freeze(states)
 
 let app_state = null
@@ -35,6 +39,9 @@ export function set_app_state(state)
 
 export function get_app_state() 
 { 
+    if (app_state === "server-error")
+        return app_state
+    
     if (token === null)
         set_app_state("authorization")
     else
@@ -53,4 +60,15 @@ export function get_app_state()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-token = await get_active_token()
+let server_is_ready = await check_server_connection()
+
+if (server_is_ready)
+{
+    token = await get_active_token()
+
+    if (token === null)
+        console.log("No token. Need authrization...")
+    else 
+        console.log("Token is valid. Authorized")
+}
+else set_app_state("server-error")

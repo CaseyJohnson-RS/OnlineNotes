@@ -1,6 +1,24 @@
 import { HOST } from './config'
 
 
+export async function server_hi()
+{
+    const url = HOST + "hi";
+    const options = { method: 'GET' };
+
+    try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) 
+            return false;
+        
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+
 export async function get_profile_info(token) 
 {
     const url = HOST + "profile-info"

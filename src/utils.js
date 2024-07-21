@@ -1,4 +1,4 @@
-import { get_profile_info } from './backendapi'
+import { get_profile_info, server_hi } from './backendapi'
 
 
 async function validate_token(token) 
@@ -6,6 +6,15 @@ async function validate_token(token)
     const res = await get_profile_info(token)
 
     return !(res === null) 
+}
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+export async function check_server_connection()
+{
+    return (await server_hi())
 }
 
 
