@@ -98,3 +98,12 @@ export async function restore_password_confirm(code)
         setTimeout( ()=>resolve(true), 1000 );
     });
 }
+
+
+export async function set_new_password(password)
+{
+    return new Promise( (resolve) => 
+    {
+        setTimeout( ()=>resolve(true), 1000 );
+    });
+}

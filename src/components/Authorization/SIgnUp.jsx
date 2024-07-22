@@ -4,7 +4,6 @@ import { set_app_state } from '../../appcontoller'
 import { validate_email, validate_password } from '../../utils';
 
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Spinner from "react-bootstrap/Spinner"
@@ -154,11 +153,11 @@ function SignUpForm(props) {
                         <Button type="submit">Sign Up</Button>
                     }
                     
-                    <Row style={{height: "15px"}}></Row>
+                    <Row style={{height: "15px"}} ></Row>
                     
                     {
                         formState === "server_error" ?
-                        "Sorry. Server error. Try later...":
+                        <span className="text-danger">Sorry. Server error. Try later...</span>:
                         <></>
                     }
                     

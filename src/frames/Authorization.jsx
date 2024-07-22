@@ -8,6 +8,7 @@ import SignUpForm from '../components/Authorization/SIgnUp';
 import SignUpConfirm from '../components/Authorization/SignUpConfirm';
 import RestorePassword from '../components/Authorization/RestorePassword';
 import RestorePasswordConfirm from '../components/Authorization/RestorePasswordConfirm';
+import SetNewPassword from '../components/Authorization/SetNewPassword';
 
 
 import { get_app_state, set_app_state } from '../appcontoller'
@@ -48,6 +49,11 @@ function Authorization(props)
     {
         header = "Confirm"
         body = <RestorePasswordConfirm rerender={component_rerender} />
+    }
+    else if (app_state === "set-new-password")
+    {
+        header = "Set new password"
+        body = <SetNewPassword rerender={component_rerender} />
     }
 
     return (<main>

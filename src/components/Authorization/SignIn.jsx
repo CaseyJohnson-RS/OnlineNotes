@@ -4,7 +4,6 @@ import { set_app_state } from '../../appcontoller'
 import { validate_email, validate_password } from '../../utils';
 
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Spinner from "react-bootstrap/Spinner"
