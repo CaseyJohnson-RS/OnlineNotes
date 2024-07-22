@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { sign_in } from '../../backendapi';
 import { set_app_state } from '../../appcontoller'
+import { validate_email, validate_password } from '../../utils';
 
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -8,46 +9,60 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Spinner from "react-bootstrap/Spinner"
 
+
+const custom_validation = () =>
+{
+    document.getElementById('signIn_email').addEventListener('input', function() {
+        this.setCustomValidity( validate_email(this.value) ? '' : 'err' );
+    });
+
+    document.getElementById('signIn_password').addEventListener('input', function() {
+        this.setCustomValidity( validate_password(this.value) ? '' : 'err' );
+    });
+}
+
+
 function SignInForm(props) {
 
     const [formState, setState] = useState(false);
     const { rerender } = props
 
     const handleSubmit = (event) => 
-    { 
-        const form = event.currentTarget;
-
-        if (form.checkValidity() === true) 
-        {
-            setState("signing_in");
-
-            sign_in(
-                event.target.elements.signIn_email.value,
-                event.target.elements.signIn_password.value
-            ).then( (result) =>
+        { 
+            const form = event.currentTarget;
+        
+            if (form.checkValidity() === true) 
             {
-                if (result) 
+                setState("signing_in");
+        
+                sign_in(
+                    event.target.elements.signIn_email.value,
+                    event.target.elements.signIn_password.value
+                ).then( (result) =>
                 {
-                    set_app_state("main-page")
-                    rerender();
-                } else 
-                {
-                    setState("wrong_data");
-                }
-            })
-        } else
-            setState("validated");
-
-        event.preventDefault();
-        event.stopPropagation();
-    };
-
+                    if (result) 
+                    {
+                        set_app_state("main-page")
+                        rerender();
+                    } else 
+                    {
+                        setState("wrong_data");
+                    }
+                })
+            } else
+                setState("validated");
+        
+            event.preventDefault();
+            event.stopPropagation();
+        };
+    
     const go_to_registration = () =>
-    {
-        set_app_state("registration");
-        rerender();
-    }
+        {
+            set_app_state("registration");
+            rerender();
+        }
 
+    useEffect(custom_validation)
 
     return (
         <>
@@ -98,7 +113,7 @@ function SignInForm(props) {
 
             </Form>
             <Row>
-                Don't have an account? 
+                Already have an account? 
                 <Row style={{height: "15px"}}></Row>
                 <Row>
                     <Col xs={6}>

@@ -54,3 +54,31 @@ export async function sign_in(username, password)
         setTimeout( ()=>resolve(false), 1000 );
     });
 }
+
+let last_username = null
+
+export async function sign_up(username, nickname, password)
+{
+    return new Promise( (resolve, reject) => 
+    {
+        setTimeout( ()=>resolve(true), 1000 );
+    });
+}
+
+export async function sign_up_confirm(code)
+{
+    return new Promise( (resolve, reject) => 
+        {
+            setTimeout( ()=>resolve(true), 1000 );
+        });
+}
+
+
+export async function check_email_is_avalilable(email)
+{
+    return new Promise( (resolve, reject) => 
+    {
+        setTimeout( ()=>resolve(true), 1000 );
+    });
+}
+

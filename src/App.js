@@ -21,7 +21,7 @@ function App() {
     body = <Authorization />
 
   return (
-    <div data-bs-theme="light">
+    <div>
       <Header />
       { body }
     </div>

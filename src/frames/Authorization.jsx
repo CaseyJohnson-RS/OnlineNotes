@@ -4,6 +4,8 @@ import Container from 'react-bootstrap/Container';import Row from 'react-bootstr
 import Col from 'react-bootstrap/Col';
 
 import SignInForm from '../components/Authorization/SignIn';
+import SignUpForm from '../components/Authorization/SIgnUp';
+import SignUpConfirm from '../components/Authorization/SignUpConfirm';
 
 
 import { get_app_state, set_app_state } from '../appcontoller'
@@ -27,7 +29,12 @@ function Authorization()
     else if (app_state === "registration")
     {
         header = "Sign Up";
-        body = <SignInForm rerender={rerender}/>
+        body = <SignUpForm rerender={rerender}/>
+    }
+    else if (app_state === "registration-confirm")
+    {
+        header = "Confirm";
+        body = <SignUpConfirm rerender={rerender}/>
     }
 
     return (<main>

@@ -37,12 +37,6 @@ export async function get_active_token()
 }
 
 
-export function check_email_is_avalilable(email)
-{
-    
-}
-
-
 export function validate_email(email) 
 {
     return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(email));
@@ -51,5 +45,5 @@ export function validate_email(email)
 
 export function validate_password(password)
 {
-
+    return (password.length >= 8 && password.length <= 32)
 }
