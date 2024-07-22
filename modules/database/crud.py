@@ -272,7 +272,8 @@ def get_note_shorts_by_filter(
             note_id=note_data["note_id"],
             header=note_data["header"],
             hex_color = note_data["hex_color"],
-            text=note_text
+            text=note_text,
+            status=note_data["title"]
         )
 
         notes.append(note)
