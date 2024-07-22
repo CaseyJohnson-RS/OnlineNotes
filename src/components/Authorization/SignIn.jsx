@@ -97,7 +97,7 @@ function SignInForm(props) {
                 <Row style={{display: formState !== "signing_in" ? "block" : "none"}}>
                     <Button type="submit">Sign in</Button>
                     <Row style={{height: "25px"}}></Row>
-                    <Button variant="outline-danger">I forgot password</Button>
+                    <Button variant="outline-danger" onClick={ () => {set_app_state("restore-password"); rerender(); }}>I forgot password</Button>
                 </Row>
                 <Row style={{display: formState === "signing_in" ? "block" : "none"}}>
                     <Spinner animation="grow" />

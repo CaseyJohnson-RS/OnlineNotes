@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { sign_up_confirm } from '../../backendapi';
+import { restore_password_confirm } from '../../backendapi';
 import { set_app_state } from '../../appcontoller'
 
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from "react-bootstrap/Spinner"
 
 
-function SignUpConfirm(props) {
+function RestorePasswordConfirm(props) {
 
     const [formState, setState] = useState(false);
     const { rerender } = props
@@ -30,7 +30,7 @@ function SignUpConfirm(props) {
     const handleSubmit = (event) => 
         { 
             setState("checking")
-            sign_up_confirm(event.target.confirm_code.value).then( (result) =>
+            restore_password_confirm(event.target.confirm_code.value).then( (result) =>
                 {
                     if (result)
                     {
@@ -39,7 +39,7 @@ function SignUpConfirm(props) {
 
                         setTimeout( () =>
                         {
-                            set_app_state("main-page");
+                            set_app_state("set-new-password");
                             rerender();
                         }, 2000)
                     } else 
@@ -54,9 +54,9 @@ function SignUpConfirm(props) {
             event.stopPropagation();
         };
     
-    const go_to_registration = () =>
+    const go_to_restore_password = () =>
         {
-            set_app_state("registration");
+            set_app_state("restore-password");
             rerender();
         }
 
@@ -116,13 +116,11 @@ function SignUpConfirm(props) {
             <Row style={{height: "25px"}}></Row>
 
             <Row style={{display: formState === "confirmed" ? "none" : "block"}}>
-                <Button variant="outline-secondary" onClick={go_to_registration}>Back</Button>
+                <Button variant="outline-secondary" onClick={go_to_restore_password}>Back</Button>
             </Row>
         </>
     );
 }
-/*
 
-*/
 
-export default SignUpConfirm;
+export default RestorePasswordConfirm;

@@ -7,6 +7,7 @@ import SignInForm from '../components/Authorization/SignIn';
 import SignUpForm from '../components/Authorization/SIgnUp';
 import SignUpConfirm from '../components/Authorization/SignUpConfirm';
 import RestorePassword from '../components/Authorization/RestorePassword';
+import RestorePasswordConfirm from '../components/Authorization/RestorePasswordConfirm';
 
 
 import { get_app_state, set_app_state } from '../appcontoller'
@@ -42,6 +43,11 @@ function Authorization(props)
     {
         header = "Restore password"
         body = <RestorePassword rerender={component_rerender}/>
+    }
+    else if (app_state === "restore-password-confirm")
+    {
+        header = "Confirm"
+        body = <RestorePasswordConfirm rerender={component_rerender} />
     }
 
     return (<main>

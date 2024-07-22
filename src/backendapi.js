@@ -90,3 +90,11 @@ export async function restore_password(username)
         setTimeout( ()=>resolve(true), 1000 );
     });
 }
+
+export async function restore_password_confirm(code)
+{
+    return new Promise( (resolve) => 
+    {
+        setTimeout( ()=>resolve(true), 1000 );
+    });
+}
