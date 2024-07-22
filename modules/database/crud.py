@@ -239,14 +239,14 @@ def get_note_shorts_by_filter(
 
     if not label is None:
         query = """
-            SELECT n.note_id, n.header, n.hex_color, n.text FROM "Note_assigned_labels" l 
+            SELECT n.note_id, n.header, n.hex_color, n.text, s.title FROM "Note_assigned_labels" l 
                 LEFT JOIN "Notes" n ON n.user_id = l.user_id AND n.note_id = l.note_id
                 LEFT JOIN "Note_status" s ON n.status = s.id
                 WHERE n.user_id = %s AND l.label = %s"""
         query_values.append(label)
     else:
         query = """
-            SELECT n.note_id, n.header, n.hex_color, n.text FROM "Notes" n 
+            SELECT n.note_id, n.header, n.hex_color, n.text, s.title FROM "Notes" n 
                 LEFT JOIN "Note_status" s ON n.status = s.id
                 WHERE n.user_id = %s"""     
     
@@ -262,6 +262,8 @@ def get_note_shorts_by_filter(
         return None
     
     notes = []
+
+    
 
     for note_data in notes_data:
 
