@@ -100,6 +100,7 @@ function SignUpForm(props) {
                     required
                     type="email"
                     placeholder="example@email.com"
+                    autoFocus={true}
                 />
                 <Form.Control.Feedback>Wonderful!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">It's not email address or this address is already taken</Form.Control.Feedback>

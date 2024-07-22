@@ -73,6 +73,7 @@ function SignInForm(props) {
                     required
                     type="email"
                     placeholder="example@email.com"
+                    autoFocus={true}
                 />
                 <Form.Control.Feedback type='invalid'>Forgot your email?..</Form.Control.Feedback>
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>

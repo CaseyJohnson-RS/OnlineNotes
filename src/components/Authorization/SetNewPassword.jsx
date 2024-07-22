@@ -75,6 +75,7 @@ function SetNewPassword(props) {
                     required
                     type="password"
                     placeholder="***********"
+                    autoFocus={true}
                 />
                 <Form.Control.Feedback>What a great password!</Form.Control.Feedback>
                 <Form.Control.Feedback type='invalid'>From 8 to 32 characters</Form.Control.Feedback>
