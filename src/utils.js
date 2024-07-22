@@ -47,3 +47,20 @@ export function validate_password(password)
 {
     return (password.length >= 8 && password.length <= 32)
 }
+
+
+export function set_app_theme(theme = null)
+{
+    if (theme === null)
+    {
+        theme = localStorage.getItem("app_theme");
+    }
+
+    if (theme === null)
+    {
+        theme = "light";
+        localStorage["app_theme"] = theme;
+    }
+
+    document.getElementById('main-body').setAttribute("data-bs-theme",theme);
+}

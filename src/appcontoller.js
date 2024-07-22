@@ -1,4 +1,4 @@
-import { get_active_token, check_server_connection } from './utils'
+import { get_active_token, check_server_connection, set_app_theme } from './utils'
 
 export const auth_states = [
     "authorization",
@@ -86,6 +86,8 @@ export async function initialize()
 {
     if (initialized) return false;// Rerendering app flag
 
+    set_app_theme();
+
     let is_server_ready = await check_server_connection();
 
     console.log("Server connection: " + is_server_ready)
@@ -95,7 +97,7 @@ export async function initialize()
         await load_token();
         app_state = null;
     }
-
+    
     initialized = true;
     return true; // Rerendering app flag
 }
