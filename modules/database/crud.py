@@ -1,6 +1,6 @@
 
 from . import send_query, send_fetch_query
-from common.schemas import User, Note, NoteShort, Error_message, Review
+from common.schemas import User, Note, Error_message, Review
 
 # В свое оправдание скажу, что базы данных проектировать я не умел до того
 # Как начал этот проект. И осуждать меня за этот плохой API взаимодействия
@@ -232,7 +232,7 @@ def get_note_shorts_by_filter(
         user_id: int, 
         label: str | None = None,
         status: str | None = None
-    ) -> list[NoteShort] | None:
+    ) -> list[Note] | None:
 
     query = ""
     query_values = [user_id]
@@ -268,11 +268,11 @@ def get_note_shorts_by_filter(
         note_text = note_data["text"] if note_data["text"] != None else ""
         note_text = note_text[:min(len(note_text),100)]
 
-        note = NoteShort(
+        note = Note(
             note_id=note_data["note_id"],
             header=note_data["header"],
             hex_color = note_data["hex_color"],
-            piece_of_text=note_text
+            text=note_text
         )
 
         notes.append(note)

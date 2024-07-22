@@ -1,5 +1,5 @@
 from typing import Annotated
-from common.schemas import User, Note, NoteShort, NoteLabeled
+from common.schemas import User, Note, NoteLabeled
 
 from modules.auth.dependences import get_current_active_user
 from modules.database.crud import create_note_in_db, \
@@ -48,17 +48,17 @@ def get_note(user: Annotated[User, Depends(get_current_active_user)], note_id: A
 def get_notes(
     user: Annotated[User, Depends(get_current_active_user)], 
     label: Annotated[str, Query()] = None
-) -> list[NoteShort] | None:
+) -> list[Note] | None:
     return get_note_shorts_by_filter(user_id=user.id, label=label, status='active')
 
 
 @router.get("/get-notes-archived", tags=["NotesAPI"])
-def get_noted_archived(user: Annotated[User, Depends(get_current_active_user)]) -> list[NoteShort] | None:
+def get_noted_archived(user: Annotated[User, Depends(get_current_active_user)]) -> list[Note] | None:
     return get_note_shorts_by_filter(user_id=user.id, status='archived')
 
 
 @router.get("/get-notes-deleted", tags=["NotesAPI"])
-def get_noted_deleted(user: Annotated[User, Depends(get_current_active_user)]) -> list[NoteShort] | None:
+def get_noted_deleted(user: Annotated[User, Depends(get_current_active_user)]) -> list[Note] | None:
     return get_note_shorts_by_filter(user_id=user.id, status='deleted')
 
 

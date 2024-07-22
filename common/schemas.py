@@ -11,13 +11,6 @@ class User(BaseModel):
     role: Annotated[str, Field()]
 
 
-class NoteShort(BaseModel):
-    note_id: int
-    header: Annotated[str | None, Field()] = None
-    hex_color: Annotated[str | None, Field()] = None
-    piece_of_text: Annotated[str | None, Field()] = None
-
-
 class Note(BaseModel):
     note_id: int
     header: Annotated[str | None, Field()] = None
