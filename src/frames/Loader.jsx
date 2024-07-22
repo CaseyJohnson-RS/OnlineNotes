@@ -13,7 +13,7 @@ export function Loader()
         <Col xs={8}>
             <h3 className="fade-in">Loading...</h3>
         </Col>
-        <Col><Spinner animation="grow" /></Col>
+        <Col><Spinner animation="grow" size="sm"/></Col>
         <Col/>
       </Row>
     </Container>)

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { initialize, get_app_state } from './appcontoller'
+import { initialize, get_app_state, auth_states } from './appcontoller'
 
 import { Header } from './components/Header'
 import { Authorization } from './frames/Authorization';
@@ -17,7 +17,7 @@ function App() {
 
   let body = <Loader />
 
-  if (app_state === "authorization")
+  if (auth_states.includes(app_state))
     body = <Authorization />
 
   return (

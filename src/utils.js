@@ -36,3 +36,20 @@ export async function get_active_token()
     return token
 }
 
+
+export function check_email_is_avalilable(email)
+{
+    
+}
+
+
+export function validate_email(email) 
+{
+    return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(email));
+}
+
+
+export function validate_password(password)
+{
+
+}

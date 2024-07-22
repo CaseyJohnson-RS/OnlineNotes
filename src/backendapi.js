@@ -42,3 +42,15 @@ export async function get_profile_info(token)
 
     return null
 }
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+export async function sign_in(username, password)
+{
+    return new Promise( (resolve, reject) => 
+    {
+        setTimeout( ()=>resolve(false), 1000 );
+    });
+}

@@ -1,6 +1,6 @@
 import { get_active_token, check_server_connection } from './utils'
 
-let auth_states = [
+export const auth_states = [
     "authorization",
     "registration",
     "registration-confirm",
@@ -9,17 +9,17 @@ let auth_states = [
     "set-new-password",
 ]
 
-let session_states = [
+export const session_states = [
     "main-page",
 ]
 
-let special_states = [
+export const special_states = [
     "checking-server",
     "server-not-responding"
 ]
 
-let states = session_states + auth_states + special_states
-Object.freeze(states)
+const states = session_states + auth_states + special_states
+
 
 let app_state = "checking-server"
 let token = null
