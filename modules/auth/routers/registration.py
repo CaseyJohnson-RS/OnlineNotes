@@ -137,7 +137,6 @@ def sign_up_confirm(
     # Совпадает ли сгенерированный код с тем, что ввёл пользователь?
     if confirm_seq != sign_up_buffer[username]["confirm_sequence"]:
         Log(f"Wrong confirm sequence {confirm_seq}. Expected " + sign_up_buffer[username]["confirm_sequence"] + ". Denied")
-        del sign_up_buffer[username]
         raise WRONG_CONFIRMATION_EXCEPTION
     
     # Создаем пользователя
