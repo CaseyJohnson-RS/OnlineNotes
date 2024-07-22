@@ -147,34 +147,30 @@ function SignUpForm(props) {
 
                 <Row style={{height: "25px"}}></Row>
                 <Row>
-                    <Col xs={4}>
+                    
                     {
                         formState === "signing_in" ?
                         <Spinner animation="grow" />:
                         <Button type="submit">Sign Up</Button>
                     }
-                        
-                    </Col>
-                    <Col xs={8}>
+                    
+                    <Row style={{height: "15px"}}></Row>
+                    
                     {
                         formState === "server_error" ?
                         "Sorry. Server error. Try later...":
                         <></>
                     }
-                    </Col>
+                    
                 </Row>
 
-                <Row style={{height: "50px"}}></Row>
+                <Row style={{height: "25px"}}></Row>
 
             </Form>
             <Row>
                 Already have an account? 
                 <Row style={{height: "15px"}}></Row>
-                <Row>
-                    <Col xs={6}>
-                        <Button variant="outline-secondary" onClick={go_to_authorization}>Sign in!</Button>
-                    </Col>
-                </Row>
+                <Button variant="outline-secondary" onClick={go_to_authorization}>Sign in!</Button>
                 
             </Row>
         </>

@@ -9,16 +9,16 @@ import { Loader } from './frames/Loader'
 function App() {
 
   const [, updateState] = useState();
-  const forceUpdate = useCallback(() => updateState({}), []);
+  const rerender = useCallback(() => updateState({}), []);
 
-  initialize().then((rerender) => { if (rerender) forceUpdate(); })
+  initialize().then((need_rerender) => { if (need_rerender) rerender(); })
 
   let app_state = get_app_state()
 
   let body = <Loader />
 
   if (auth_states.includes(app_state))
-    body = <Authorization />
+    body = <Authorization rerender={rerender}/>
 
   return (
     <div>

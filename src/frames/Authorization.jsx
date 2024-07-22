@@ -6,15 +6,17 @@ import Col from 'react-bootstrap/Col';
 import SignInForm from '../components/Authorization/SignIn';
 import SignUpForm from '../components/Authorization/SIgnUp';
 import SignUpConfirm from '../components/Authorization/SignUpConfirm';
+import RestorePassword from '../components/Authorization/RestorePassword';
 
 
 import { get_app_state, set_app_state } from '../appcontoller'
 
 
-function Authorization()
+function Authorization(props)
 {
     const [, updateState] = useState();
-    const rerender = useCallback(() => updateState({}), []);
+    const component_rerender = useCallback(() => updateState({}), []);
+    const { parent_rerender } = props
 
     const app_state = get_app_state();
 
@@ -24,17 +26,22 @@ function Authorization()
     if (app_state === "authorization")
     {
         header = "Sign In";
-        body = <SignInForm rerender={rerender}/>
+        body = <SignInForm rerender={component_rerender}/>
     } 
     else if (app_state === "registration")
     {
         header = "Sign Up";
-        body = <SignUpForm rerender={rerender}/>
+        body = <SignUpForm rerender={component_rerender}/>
     }
     else if (app_state === "registration-confirm")
     {
         header = "Confirm";
-        body = <SignUpConfirm rerender={rerender}/>
+        body = <SignUpConfirm rerender={component_rerender}/>
+    }
+    else if (app_state === "restore-password")
+    {
+        header = "Restore password"
+        body = <RestorePassword rerender={component_rerender}/>
     }
 
     return (<main>

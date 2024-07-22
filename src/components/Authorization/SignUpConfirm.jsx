@@ -109,7 +109,7 @@ function SignUpConfirm(props) {
             <Row style={{height: "25px", display: formState === "confirmed" ? "block" : "none"}}></Row>
             <Row style={{display: formState === "confirmed" ? "block" : "none"}}>
                 
-                <Col xs={10}><h4>Successful!</h4></Col>
+                <Col xs={10}><h4 className='text-success'>Successful!</h4></Col>
                 
             </Row> 
 

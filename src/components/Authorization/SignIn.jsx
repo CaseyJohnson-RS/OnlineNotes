@@ -75,6 +75,7 @@ function SignInForm(props) {
                     type="email"
                     placeholder="example@email.com"
                 />
+                <Form.Control.Feedback type='invalid'>Forgot your email?..</Form.Control.Feedback>
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
@@ -87,40 +88,38 @@ function SignInForm(props) {
                     type="password"
                     placeholder="***********"
                 />
+                <Form.Control.Feedback type='invalid'>I don't think this is your password...</Form.Control.Feedback>
                 <Form.Control.Feedback>Looks perfect!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Row style={{height: "25px"}}></Row>
-                <Row>
-                    <Col xs={4}>
-                    {
-                        formState === "signing_in" ?
-                        <Spinner animation="grow" />:
-                        <Button type="submit">Sign in</Button>
-                    }
-                        
-                    </Col>
-                    <Col xs={8}>
-                    {
+
+                <Row style={{display: formState !== "signing_in" ? "block" : "none"}}>
+                    <Button type="submit">Sign in</Button>
+                    <Row style={{height: "25px"}}></Row>
+                    <Button variant="outline-danger">I forgot password</Button>
+                </Row>
+                <Row style={{display: formState === "signing_in" ? "block" : "none"}}>
+                    <Spinner animation="grow" />
+                </Row>
+
+                <Row style={{height: "25px"}}></Row>
+
+                <Row className='text-danger'>
+                    {  
                         formState === "wrong_data" ?
                         "Wrong username or password...":
                         <></>
                     }
-                    </Col>
                 </Row>
 
-                <Row style={{height: "50px"}}></Row>
+                <Row style={{height: "25px"}}></Row>
 
             </Form>
             <Row>
                 Already have an account? 
                 <Row style={{height: "15px"}}></Row>
-                <Row>
-                    <Col xs={6}>
-                        <Button variant="outline-secondary" onClick={go_to_registration}>Sign up!</Button>
-                    </Col>
-                </Row>
-                
+                <Button variant="outline-secondary" onClick={go_to_registration}>Sign up!</Button>
             </Row>
         </>
     );

@@ -59,15 +59,15 @@ let last_username = null
 
 export async function sign_up(username, nickname, password)
 {
-    return new Promise( (resolve, reject) => 
+    return new Promise( (resolve) => 
     {
-        setTimeout( ()=>resolve(true), 1000 );
+        setTimeout( ()=>resolve(false), 1000 );
     });
 }
 
 export async function sign_up_confirm(code)
 {
-    return new Promise( (resolve, reject) => 
+    return new Promise( (resolve) => 
         {
             setTimeout( ()=>resolve(true), 1000 );
         });
@@ -76,9 +76,17 @@ export async function sign_up_confirm(code)
 
 export async function check_email_is_avalilable(email)
 {
-    return new Promise( (resolve, reject) => 
+    return new Promise( (resolve) => 
     {
         setTimeout( ()=>resolve(true), 1000 );
     });
 }
 
+
+export async function restore_password(username)
+{
+    return new Promise( (resolve) => 
+    {
+        setTimeout( ()=>resolve(true), 1000 );
+    });
+}
