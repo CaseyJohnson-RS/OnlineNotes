@@ -31,6 +31,8 @@ function SignUpForm(props) {
                                 this.setCustomValidity('');
                             else 
                                 this.setCustomValidity('err');
+
+                            setState("validated")
                         })
                     }, 800)  
                 } 
@@ -39,7 +41,7 @@ function SignUpForm(props) {
             });
 
             document.getElementById('signUp_nickname').addEventListener('input', function() {
-                this.setCustomValidity( this.value.length >= 2 ? '' : 'err' );
+                this.setCustomValidity( this.value.length >= 2 && this.value.length <= 64 ? '' : 'err' );
             });
 
             document.getElementById('signUp_password').addEventListener('input', function() {

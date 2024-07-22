@@ -18,7 +18,7 @@ function App() {
   let body = <Loader />
 
   if (auth_states.includes(app_state))
-    body = <Authorization rerender={rerender}/>
+    body = <Authorization />
 
   return (
     <div>

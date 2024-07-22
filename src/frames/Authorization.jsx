@@ -11,21 +11,24 @@ import RestorePasswordConfirm from '../components/Authorization/RestorePasswordC
 import SetNewPassword from '../components/Authorization/SetNewPassword';
 
 
-import { get_app_state, set_app_state } from '../appcontoller'
+import { get_app_state } from '../appcontoller'
 
 
-function Authorization(props)
+function Authorization()
 {
     const [, updateState] = useState();
     const component_rerender = useCallback(() => updateState({}), []);
-    const { parent_rerender } = props
 
     const app_state = get_app_state();
 
     let header;
     let body;
 
-    if (app_state === "authorization")
+    if (app_state === "main-page")
+    {
+        window.location.reload();
+    }
+    else if (app_state === "authorization")
     {
         header = "Sign In";
         body = <SignInForm rerender={component_rerender}/>
