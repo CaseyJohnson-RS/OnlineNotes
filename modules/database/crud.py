@@ -118,12 +118,17 @@ def update_password_hash(user_id_or_name: str | int, password_hash: str) -> bool
 
 # - - - - - - - - - - - - NotesAPI mainly used functions  - - - - - - - - - - - -
 
-def create_note_in_db(user_id: int) -> bool:
+def create_note_in_db(user_id: int) -> int:
 
-    query = """INSERT INTO "Notes" (user_id) VALUES (%s)"""
+    query = """INSERT INTO "Notes" (user_id) VALUES (%s) RETURNING note_id"""
     query_value = (user_id,)
 
-    return send_query(query, query_value)
+    data = send_query(query, query_value)
+
+    if data is None:
+        return None
+
+    return data[0]["note_id"]
 
 
 def convert_note_status(note_status_name_or_id: int | str) -> int | str | None:

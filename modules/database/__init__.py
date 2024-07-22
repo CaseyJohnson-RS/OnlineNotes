@@ -71,7 +71,12 @@ def send_query(query: str, query_values: tuple, cursor: Cursor = None) -> bool:
         DBConnect()
 
         return False
-     
+    
+    data = cursor.fetchall()
+
+    if not data is None:
+        return data
+
     return True
 
 

@@ -64,7 +64,7 @@ def get_noted_deleted(user: Annotated[User, Depends(get_current_active_user)]) -
 
 # Создать заметку
 @router.post("/create-note", tags=["NotesAPI"])
-def create_note(user: Annotated[User, Depends(get_current_active_user)]):
+def create_note(user: Annotated[User, Depends(get_current_active_user)]) -> int:
     return create_note_in_db(user_id=user.id)
 
 # Архивировать / разархивировать
