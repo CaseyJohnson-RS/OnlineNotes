@@ -71,6 +71,21 @@ def send_query(query: str, query_values: tuple, cursor: Cursor = None) -> bool:
         DBConnect()
 
         return False
+
+    return True
+    
+@DBSession
+def send_query_with_return(query: str, query_values: tuple, cursor: Cursor = None) -> bool:
+
+    try:
+        cursor.execute(query, query_values)
+        connection.commit()
+    except Exception as e:  
+        Log("DataBase Exception: " + str(e))
+
+        DBConnect()
+
+        return False
     
     data = cursor.fetchall()
 
@@ -78,6 +93,5 @@ def send_query(query: str, query_values: tuple, cursor: Cursor = None) -> bool:
         return data
 
     return True
-
 
 DBConnect()

@@ -1,5 +1,4 @@
-
-from . import send_query, send_fetch_query
+from . import send_query, send_fetch_query,send_query_with_return
 from common.schemas import User, Note, Error_message, Review
 
 # В свое оправдание скажу, что базы данных проектировать я не умел до того
@@ -123,7 +122,7 @@ def create_note_in_db(user_id: int) -> int:
     query = """INSERT INTO "Notes" (user_id) VALUES (%s) RETURNING note_id"""
     query_value = (user_id,)
 
-    data = send_query(query, query_value)
+    data = send_fetch_query(query, query_value)
 
     if data is None:
         return None
