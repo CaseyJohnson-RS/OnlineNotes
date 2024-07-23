@@ -239,3 +239,119 @@ export async function set_new_password(password)
 
     return false
 }
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+export async function get_user_labels()
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return []
+
+    const url = HOST + "get-user-labels"
+    const options = {
+        method: 'GET',
+        headers: { "Authorization": "Bearer " + token },
+    }
+
+    try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) 
+            return []
+        
+        return (await response.json());
+
+    } catch (error) {
+        console.error(error.message);
+    }
+
+    return []
+}
+
+
+export async function delete_user_label(label)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const url = HOST + "delete-label?" + new URLSearchParams({label: label}).toString();
+    const options = {
+        method: 'DELETE',
+        headers: { "Authorization": "Bearer " + token },
+    }
+
+    try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) 
+            return false
+        
+        return (await response.json());
+
+    } catch (error) {
+        console.error(error.message);
+    }
+
+    return false
+}
+
+
+export async function create_label(label)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const url = HOST + "create-label?" + new URLSearchParams({label: label}).toString();
+    const options = {
+        method: 'POST',
+        headers: { "Authorization": "Bearer " + token },
+    }
+
+    try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) 
+            return false
+        
+        return (await response.json());
+
+    } catch (error) {
+        console.error(error.message);
+    }
+
+    return false
+}
+
+
+export async function update_note(note_id, note_options) // Needs check
+{
+    const data = {
+        note_id: note_id,
+        header: note_options.header,
+        text: note_options.text,
+        hex_color: note_options.hex_color,
+        status: note_options.status 
+    }
+
+    const url = HOST + "update-note";
+    const options = { method: 'PATCH', body: data };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json())
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
