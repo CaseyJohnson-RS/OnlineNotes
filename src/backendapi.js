@@ -483,3 +483,56 @@ export async function get_note(note_id)
 
     return null
 }
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+export async function set_nickname(nickname)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "set-nickname?" + new URLSearchParams({nickname: nickname}).toString();;
+    let options = { method: 'POST', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function delete_account()
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "delete-account";
+    let options = { method: 'DELETE', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}

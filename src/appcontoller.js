@@ -12,7 +12,8 @@ export const auth_states = [
 
 export const session_states = [
     "main-page",
-    "note-edit"
+    "note-edit",
+    "profile"
 ]
 
 export const special_states = [

@@ -9,6 +9,7 @@ import { Authorization } from './frames/Authorization';
 import { MainPage } from './frames/MainPage'
 import { Loader } from './frames/Loader'
 import { NoteEditor } from './frames/NoteEditor';
+import { Profile } from './frames/Profile';
 
 function App() {
 
@@ -32,6 +33,10 @@ function App() {
   else if (app_state === "note-edit")
     
     body = <NoteEditor app_rerender={rerender}/>
+
+  else if (app_state === "profile")
+  
+    body = <Profile app_rerender={rerender}/>
     
   return (
     <div>

@@ -1,4 +1,4 @@
-import { get_app_state, auth_states, special_states } from '../appcontoller'
+import { get_app_state, auth_states, special_states, set_app_state } from '../appcontoller'
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -34,7 +34,7 @@ function Header(props)
   let profile_btn = <></>;
 
 
-  if (auth_states.includes(app_state) || special_states.includes(app_state) || app_state === "note-edit")
+  if (app_state !== "main-page")
   {
     profile_btn = 
     <Button variant="outline-primary" href='https://github.com/CaseyJohnson-RS/OnlineNotes' target='_blank'>
@@ -43,6 +43,8 @@ function Header(props)
 
     if (app_state === "note-edit")
       label = "Note editor"
+    else if (app_state === "profile")
+      label = "Profile"
     else
       label = "Online Notes"
   } 
@@ -71,7 +73,12 @@ function Header(props)
         <i className="bi bi-gear-fill"></i>
       </Button>
     profile_btn = 
-      <Button variant="outline-primary" >
+      <Button variant="outline-primary" onClick={() => 
+        {
+          set_app_state("profile");
+          props.app_rerender();
+        }
+      }>
         { nickname }
       </Button>
   }
