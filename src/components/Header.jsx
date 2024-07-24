@@ -5,10 +5,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
+import SettingModal from './SettingsModal';
+
+import { useState } from 'react';
 
 
 function Header(props)
 {
+  const [settingsShow, setSettingsShow] = useState(false);
   const app_state = get_app_state();
 
   let profile_info = 
@@ -22,8 +26,6 @@ function Header(props)
       role: "user"
     }
   
-  console.log("Profile info:");
-  console.log(profile_info);
   let label = "";
   let nickname = (profile_info.nickname.length <= 32 ? profile_info.nickname : "Profile");
   let admin = profile_info.role === "admin";
@@ -32,12 +34,17 @@ function Header(props)
   let profile_btn = <></>;
 
 
-  if (auth_states.includes(app_state) || special_states.includes(app_state))
+  if (auth_states.includes(app_state) || special_states.includes(app_state) || app_state === "note-edit")
   {
     profile_btn = 
     <Button variant="outline-primary" href='https://github.com/CaseyJohnson-RS/OnlineNotes' target='_blank'>
       <i className="bi bi-github"></i> Code of the project
     </Button>
+
+    if (app_state === "note-edit")
+      label = "Note editor"
+    else
+      label = "Online Notes"
   } 
   else if (app_state === "main-page")
   {
@@ -60,7 +67,7 @@ function Header(props)
         </Button>
     }
     settings_btn = 
-      <Button variant="outline-secondary" > 
+      <Button variant="outline-secondary" onClick={() => setSettingsShow(true)}> 
         <i className="bi bi-gear-fill"></i>
       </Button>
     profile_btn = 
@@ -69,10 +76,12 @@ function Header(props)
       </Button>
   }
 
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   return (<Navbar expand="lg" className="bg-body-tertiary">
       <Container>
+        <SettingModal show={settingsShow} closeModal={ () => setSettingsShow(false) }/>
 
         <Navbar.Brand>
         <i className="bi bi-journal-bookmark-fill"></i>

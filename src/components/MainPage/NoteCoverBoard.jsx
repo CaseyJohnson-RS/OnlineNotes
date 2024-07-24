@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { get_notes_by_filter } from '../../backendapi';
+import { set_app_state } from '../../appcontoller';
 
 import { NoteCover } from './NoteCover';
 import { Col, Row, Spinner } from 'react-bootstrap';
@@ -18,15 +19,20 @@ function NoteCoverBoard(props) {
       { notes_label: "", notes_status: "active"} : 
       JSON.parse(localStorage.getItem("main_page_config"));
 
-  const onUpdateNoteStatus = () =>
+  const check_notes = (localStorage.getItem("note_edited") === null) ? "false" : localStorage.getItem("note_edited")
+  if (check_notes === "true")
   {
+    localStorage["note_edited"] = "false"
     setState("loading")
   }
 
+  const onUpdateNoteStatus = () =>  { setState("loading") }
 
   const onOpenNote = (note_id) =>
   {
-    console.log("onOpenNote");
+    localStorage["note_edit_id"] = note_id;
+    set_app_state("note-edit");
+    props.app_rerender();
   }
 
   if (s_notes_label !== notes_label || s_notes_status !== notes_status)
@@ -35,6 +41,9 @@ function NoteCoverBoard(props) {
     s_notes_status = notes_status;
     setState("loading")
   }
+
+  
+
 
   if (state === "loading")
   {

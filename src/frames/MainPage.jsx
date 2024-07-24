@@ -7,7 +7,6 @@ import { NoteCoverBoard } from '../components/MainPage/NoteCoverBoard';
 
 
 function MainPage(props) {
-  const [, updateState] = useState();
 
   return (
     <>
@@ -16,7 +15,7 @@ function MainPage(props) {
           <LabelChooser app_rerender={props.app_rerender}/>
         </Col>
         <Col xs={9}>
-          <NoteCoverBoard />
+          <NoteCoverBoard app_rerender={props.app_rerender}/>
         </Col>
       </Row>
     </>

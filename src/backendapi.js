@@ -408,3 +408,78 @@ export async function get_notes_by_filter(label, status)
 
     return []
 }
+
+
+export async function set_label(note_id, label)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "set-label?" + new URLSearchParams({note_id: note_id, label: label}).toString();;
+    let options = { method: 'POST', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function unset_label(note_id, label)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "unset-label?" + new URLSearchParams({note_id: note_id, label: label}).toString();;
+    let options = { method: 'POST', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function get_note(note_id)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return null
+
+    let url = HOST + "get-note?" + new URLSearchParams({note_id: note_id}).toString();;
+    let options = { method: 'GET', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return null
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return null
+}

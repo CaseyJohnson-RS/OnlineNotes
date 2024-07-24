@@ -8,6 +8,7 @@ import { Header } from './components/Header'
 import { Authorization } from './frames/Authorization';
 import { MainPage } from './frames/MainPage'
 import { Loader } from './frames/Loader'
+import { NoteEditor } from './frames/NoteEditor';
 
 function App() {
 
@@ -27,6 +28,10 @@ function App() {
   else if (app_state === "main-page")
   
     body = <MainPage app_rerender={rerender}/>
+
+  else if (app_state === "note-edit")
+    
+    body = <NoteEditor app_rerender={rerender}/>
     
   return (
     <div>
