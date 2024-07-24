@@ -330,16 +330,28 @@ export async function create_label(label)
 
 export async function update_note(note_id, note_options) // Needs check
 {
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return []
+
     const data = {
-        note_id: note_id,
-        header: note_options.header,
-        text: note_options.text,
-        hex_color: note_options.hex_color,
-        status: note_options.status 
+        "note_id": note_id,
+        "header": note_options.header || "",
+        "text": note_options.text || "",
+        "hex_color": note_options.hex_color || "",
+        "status": note_options.status 
     }
 
     const url = HOST + "update-note";
-    const options = { method: 'PATCH', body: data };
+    const options = { 
+        method: 'PATCH', 
+        body: JSON.stringify(data),
+        headers: { 
+            "Authorization": "Bearer " + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
 
     try {
         const response = await fetch(url, options);
@@ -354,4 +366,45 @@ export async function update_note(note_id, note_options) // Needs check
     }
 
     return false
+}
+
+
+export async function get_notes_by_filter(label, status)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return []
+
+    let url = HOST + "get-notes";
+    let options = { method: 'GET', headers: { "Authorization": "Bearer " + token } };
+
+    if (label.length > 0)
+    {
+        url += "?" + new URLSearchParams({label: label}).toString();
+    } 
+    else if (status === "deleted")
+    {
+        url += "-deleted";
+    }
+    else if (status === "archived")
+    {
+        url += "-archived";
+    }
+
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return []
+
+        const res = (await response.json());
+
+        return res
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return []
 }

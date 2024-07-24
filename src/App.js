@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 
 import { initialize, get_app_state, auth_states } from './appcontoller'
 
+import { Row, Col } from 'react-bootstrap';
+
 import { Header } from './components/Header'
 import { Authorization } from './frames/Authorization';
 import { MainPage } from './frames/MainPage'
@@ -28,8 +30,14 @@ function App() {
     
   return (
     <div>
-      <Header />
-      { body }
+      <Header app_rerender={rerender}/>
+      <Row>
+        <Col xs={1}/>
+        <Col xs={10}>
+        { body }
+        </Col>
+        <Col xs={1}/>
+      </Row>
     </div>
   );
 }

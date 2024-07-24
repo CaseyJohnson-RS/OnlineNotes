@@ -1,13 +1,65 @@
 import { useState, useCallback } from 'react';
-import { NoteCover } from './NoteCover';
+import { get_notes_by_filter } from '../../backendapi';
 
-import { Col, Row } from 'react-bootstrap';
+import { NoteCover } from './NoteCover';
+import { Col, Row, Spinner } from 'react-bootstrap';
+
+
+let note_list = []
+let s_notes_label = null, s_notes_status = null
 
 
 function NoteCoverBoard(props) {
 
-  const [, updateState] = useState();
-  const component_rerender = useCallback(() => updateState({}), []);
+  const [state, setState] = useState("idle");
+
+  const {notes_label, notes_status} =
+      localStorage.getItem("main_page_config") === null ? 
+      { notes_label: "", notes_status: "active"} : 
+      JSON.parse(localStorage.getItem("main_page_config"));
+
+  const onUpdateNoteStatus = () =>
+  {
+    setState("loading")
+  }
+
+
+  const onOpenNote = (note_id) =>
+  {
+    console.log("onOpenNote");
+  }
+
+  if (s_notes_label !== notes_label || s_notes_status !== notes_status)
+  {
+    s_notes_label = notes_label;
+    s_notes_status = notes_status;
+    setState("loading")
+  }
+
+  if (state === "loading")
+  {
+    get_notes_by_filter(notes_label, notes_status)
+    .then( (response) =>
+    {
+      note_list = response.map( (note) =>
+        <Col xs={6} key={note.note_id} style={{padding: "10px"}}>
+          <NoteCover 
+            title={note.header || "..."}
+            content={note.text || "..."}
+            color={note.hex_color}
+            note_status={note.status}
+            note_id={note.note_id}
+
+            update_note_status_callback={onUpdateNoteStatus}
+            open_note_callback={onOpenNote}
+          />
+        </Col>
+      );
+      
+      setState("idle")
+    });
+  }
+
 
   /*
     title, 
@@ -16,37 +68,25 @@ function NoteCoverBoard(props) {
     note_status, // active, archived, deleted
     note_id, 
 
-    update_note_status_callback,
+    onUpdateNoteStatus_callback,
     open_note_callback
 */
 
+
+// States ^.^
+/*  idle
+    loading
+    wating_note_response
+*/
+
   return (
-    <>
-        <Row>
-        <Col xs={6}>
-            <NoteCover 
-              title="Header1" 
-              content="Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!..Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!..Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!..Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!..Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!..Lorem ipsum и тд и тп, дада, даадааа, хаха, щекотно!.." 
-              color="#000000"
-              note_id={0}
-              note_status="archived"
-              
-
-            />
-        </Col>
-        <Col xs={6}>
-            <NoteCover 
-              title="Header 2" 
-              content="Стена, на ней картина, в столе дырка, бежит марина, успеть бы толька..." 
-              color="#555555"
-              note_id={1}
-              note_status="deleted"
-              
-
-            />
-        </Col>
+    <Row style={{padding: "10px"}}>
+      {
+        state === "loading" ? 
+        <Spinner style={{margin: "25% 50%"}} animation='grow' /> :
+        note_list
+      }
     </Row>
-    </>
   );
 }
 

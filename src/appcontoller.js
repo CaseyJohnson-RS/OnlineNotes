@@ -1,4 +1,5 @@
 import { get_active_token, check_server_connection, set_app_theme } from './utils'
+import { get_profile_info } from './backendapi'
 
 export const auth_states = [
     "authorization",
@@ -95,6 +96,9 @@ export async function initialize()
     if (!is_server_ready) app_state = "server-not-responding";
     else {
         await load_token();
+        const obj = await get_profile_info(token);
+        if (obj !== null)
+            localStorage["profile_info"] = JSON.stringify(obj);
         app_state = null;
     }
     
