@@ -119,15 +119,25 @@ def update_password_hash(user_id_or_name: str | int, password_hash: str) -> bool
 
 def create_note_in_db(user_id: int) -> int:
 
-    query = """INSERT INTO "Notes" (user_id) VALUES (%s) RETURNING note_id"""
+    print("--1--")
+
+    query = """INSERT INTO "Notes" (user_id) VALUES (%s)"""
     query_value = (user_id,)
 
-    data = send_fetch_query(query, query_value)
+    print("--2--")
 
-    if data is None:
-        return None
+    send_query(query, query_value)
+    
+    print("--3--")
 
-    return data[0]["note_id"]
+    query = """SELECT MAX(note_id) FROM "Notes" WHERE user_id = %s"""
+    query_value = (user_id,)
+
+    data = send_fetch_query(query, query_value,'one')
+
+    print(data)
+
+    return data["max"]
 
 
 def convert_note_status(note_status_name_or_id: int | str) -> int | str | None:
