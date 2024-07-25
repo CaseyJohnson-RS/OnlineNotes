@@ -13,7 +13,8 @@ from modules.database.crud import create_note_in_db, \
     unset_label_to_note_in_db, \
     create_user_label_db, \
     delete_user_label_db, \
-    get_all_user_labels
+    get_all_user_labels, \
+    delete_deleted_notes
 
 from fastapi import APIRouter, Depends, Body, Query
 
@@ -133,3 +134,9 @@ def clear_note_labels(
 ) -> bool:
     
     return clear_note_labels_from_db(user.id, note_id)
+
+
+# Удалить заметку польностью
+@router.delete("/clear-deleted-notes", tags=["NotesAPI"])
+def clear_deleted_notes(user: Annotated[User, Depends(get_current_active_user)]) -> bool:
+    return delete_deleted_notes(user.id);

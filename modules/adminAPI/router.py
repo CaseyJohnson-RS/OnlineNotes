@@ -83,3 +83,8 @@ def read_error_messages(offset: Annotated[int, Query()] = 0, limit: Annotated[in
 @router.get("/admin-get-reviews", dependencies=[Depends(verify_admin)], tags=["AdminAPI"])
 def read_reviews(offset: Annotated[int, Query()] = 0, limit: Annotated[int, Query()] = 10) -> list[Review]:
     return get_reviews(offset, limit)
+
+
+@router.patch("/admin-set-user-nickname", dependencies=[Depends(verify_admin)], tags=["AdminAPI"])
+def set_nickname(user_id: Annotated[int, Body()], nickname: Annotated[str, Body()]) -> bool:
+    return update_user(user_id, nickname=nickname)

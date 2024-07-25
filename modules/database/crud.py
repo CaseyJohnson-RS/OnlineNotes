@@ -201,16 +201,43 @@ def get_note_labels(user_id: int, note_id: int) -> list[str]:
 
 def update_note_in_db(user_id: int, note: Note) -> bool:
 
-    new_note_status = convert_note_status(note.status)
+    new_note_status = None
+    
+    if (note.status != None):
+        new_note_status = convert_note_status(note.status)
 
-    if new_note_status is None:
-        return False
+    #( note.header, note.text, note.hex_color, new_note_status,
+    # , text=%s, hex_color=%s, status=%s
 
-    query = """
-        UPDATE "Notes" SET header=%s, text=%s, hex_color=%s, status=%s 
-        WHERE user_id=%s AND note_id=%s
-    """
-    query_value = ( note.header, note.text, note.hex_color, new_note_status, user_id, note.note_id)
+    query = """UPDATE "Notes" SET """
+    query_value = []
+
+    commacheck = False
+
+    if (note.header != None):
+        query += (',' if commacheck else '') + "header=%s"
+        commacheck = True
+        query_value.append(note.header)
+    
+    if (note.text != None):
+        query += (',' if commacheck else '') + "text=%s"
+        commacheck = True
+        query_value.append(note.text)
+    
+    if (note.hex_color != None):
+        query += (',' if commacheck else '') + "hex_color=%s"
+        commacheck = True
+        query_value.append(note.hex_color)
+    
+    if (new_note_status != None):
+        query += (',' if commacheck else '') + "status=%s"
+        commacheck = True
+        query_value.append(new_note_status)
+
+    query += """ WHERE user_id=%s AND note_id=%s"""
+    query_value += [user_id, note.note_id]
+    
+    print(query, query_value)
     
     return send_query(query, query_value)
 
@@ -222,6 +249,17 @@ def delete_note_in_db(user_id: int, note_id: int) -> bool:
         WHERE user_id = %s AND note_id = %s
     """
     query_values = (user_id, note_id)
+
+    return send_query(query, query_values)
+
+
+def delete_deleted_notes(user_id: int) -> bool:
+
+    query = """
+        DELETE FROM "Notes"
+        WHERE user_id = %s AND status = 3
+    """
+    query_values = (user_id,)
 
     return send_query(query, query_values)
 
