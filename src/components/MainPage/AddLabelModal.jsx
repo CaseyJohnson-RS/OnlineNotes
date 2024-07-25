@@ -71,7 +71,7 @@ function AddLabelModal(props) {
                 <Form validated={state !== ""} onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="new_label_field" style={{display: state !== "error" && state !== "creating_label" ? "block" : "none"}}>
                         <Form.Label>New label</Form.Label>
-                        <Form.Control type="text" placeholder="Some name"/>
+                        <Form.Control type="text" placeholder="Some name" maxLength={16}/>
                         <Form.Control.Feedback type='invalid'>Label can't be empty or such a name already exists</Form.Control.Feedback>
                         <Form.Control.Feedback>Looks awesome!</Form.Control.Feedback>
                     </Form.Group>

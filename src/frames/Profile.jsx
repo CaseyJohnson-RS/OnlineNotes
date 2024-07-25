@@ -24,6 +24,7 @@ function Profile(props) {
 
     let nickname = profileInfo.nickname;
     const user_id = profileInfo.id;
+    const email = profileInfo.email;
 
     const onSetNickname = (nick) =>
     {
@@ -47,7 +48,7 @@ function Profile(props) {
                 
                 <Row>
                     <Col xs={8}>
-                        <span style={{opacity: "75%"}}>sharus.programmer@gmail.com</span>
+                        <span style={{opacity: "75%"}}>{email}</span>
                     </Col>
                 </Row>
 

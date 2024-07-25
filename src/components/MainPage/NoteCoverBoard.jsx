@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
-import { get_notes_by_filter } from '../../backendapi';
+import { clear_deleted_notes, get_notes_by_filter } from '../../backendapi';
 import { set_app_state } from '../../appcontoller';
 
 import { NoteCover } from './NoteCover';
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Col, Row, Spinner, Button } from 'react-bootstrap';
 
 
 let note_list = []
@@ -13,6 +13,7 @@ let s_notes_label = null, s_notes_status = null
 function NoteCoverBoard(props) {
 
   const [state, setState] = useState("idle");
+  const [clearButtonState, setCBS] = useState("idle")
 
   const {notes_label, notes_status} =
       localStorage.getItem("main_page_config") === null ? 
@@ -42,9 +43,6 @@ function NoteCoverBoard(props) {
     setState("loading")
   }
 
-  
-
-
   if (state === "loading")
   {
     get_notes_by_filter(notes_label, notes_status)
@@ -69,6 +67,20 @@ function NoteCoverBoard(props) {
     });
   }
 
+  const clearDeletedNotes = () =>
+  {
+    setCBS("loading");
+    clear_deleted_notes()
+    .then( (res) =>
+    {
+      if (res)
+      {
+        setState("loading");
+      }
+      setCBS("idle");
+    })
+  }
+
 
   /*
     title, 
@@ -90,6 +102,18 @@ function NoteCoverBoard(props) {
 
   return (
     <Row style={{padding: "10px"}}>
+      <Row >
+      <Col xs={5}/>
+        <Col xs={2} style={{padding: "10px"}} >
+        {
+          clearButtonState === "loading" ?
+          <Spinner animation='grow' /> :
+          <Button variant="outline-danger" style={{display: (notes_status === "deleted" && note_list.length > 0) ? "inline-block" : "none"}} onClick={clearDeletedNotes}>Clear trash</Button>
+        }
+          
+        </Col>
+      </Row>
+      
       {
         state === "loading" ? 
         <Spinner style={{margin: "25% 50%"}} animation='grow' /> :

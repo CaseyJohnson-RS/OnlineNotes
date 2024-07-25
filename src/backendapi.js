@@ -335,12 +335,18 @@ export async function update_note(note_id, note_options) // Needs check
         return []
 
     const data = {
-        "note_id": note_id,
-        "header": note_options.header || "",
-        "text": note_options.text || "",
-        "hex_color": note_options.hex_color || "",
-        "status": note_options.status 
+        note_id: note_id,
+        status: note_options.status 
     }
+
+    if (note_options.header !== undefined)
+        data.header = note_options.header
+
+    if (note_options.header !== undefined)
+        data.text = note_options.text
+
+    if (note_options.header !== undefined)
+        data.hex_color = note_options.color
 
     const url = HOST + "update-note";
     const options = { 
@@ -485,6 +491,31 @@ export async function get_note(note_id)
 }
 
 
+export async function create_note()
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return null
+
+    let url = HOST + "create-note"
+    let options = { method: 'POST', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return null
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return null
+}
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
@@ -521,6 +552,223 @@ export async function delete_account()
 
     let url = HOST + "delete-account";
     let options = { method: 'DELETE', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function get_user(email)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return null
+
+    let url = HOST + "admin-get-user?" + new URLSearchParams({email: email}).toString();
+    let options = { method: 'GET', headers: { "Authorization": "Bearer " + token } };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return null
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return null
+}
+
+
+export async function set_user_active(user_id, active)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const data = {
+        user_id: user_id,
+        active: active
+    }
+
+    let url = HOST + "admin-set-user-active";
+    let options = { method: 'PATCH', headers: { 
+        "Authorization": "Bearer " + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify(data) };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function set_user_email(user_id, new_email)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const data = { 
+        user_id: user_id, 
+        email: new_email 
+    }
+
+    let url = HOST + "admin-set-user-email";
+    let options = { method: 'PATCH', headers: { 
+        "Authorization": "Bearer " + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify(data) };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function set_user_nickname(user_id, new_nickname)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const data = { 
+        user_id: user_id, 
+        nickname: new_nickname 
+    }
+
+    let url = HOST + "admin-set-user-nickname";
+    let options = { method: 'PATCH', headers: { 
+        "Authorization": "Bearer " + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify(data) };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function set_user_password(user_id, new_password)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    const data = { 
+        user_id: user_id, 
+        password: new_password 
+    }
+
+    let url = HOST + "admin-set-user-password";
+    let options = { method: 'PATCH', headers: { 
+        "Authorization": "Bearer " + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify(data) };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function delete_user_account(user_id)
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "admin-delete-user";
+    let options = { method: 'PATCH', headers: { 
+        "Authorization": "Bearer " + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify(user_id) };
+
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok)
+            return false
+
+        return (await response.json());
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    return false
+}
+
+
+export async function clear_deleted_notes()
+{
+    const token = localStorage.getItem("token")
+    if (token === null)
+        return false
+
+    let url = HOST + "clear-deleted-notes";
+    let options = { method: 'DELETE', headers: { 
+        "Authorization": "Bearer " + token
+    }};
 
     try {
         const response = await fetch(url, options);

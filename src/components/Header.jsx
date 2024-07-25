@@ -45,6 +45,8 @@ function Header(props)
       label = "Note editor"
     else if (app_state === "profile")
       label = "Profile"
+    else if (app_state === "admin")
+      label = "Admin"
     else
       label = "Online Notes"
   } 
@@ -64,7 +66,12 @@ function Header(props)
     if (admin)
     {
       admin_btn = 
-        <Button variant="outline-info" > 
+        <Button variant="outline-info" onClick={() => 
+          {
+            set_app_state("admin");
+            props.app_rerender();
+          }
+        }> 
           <i className="bi bi-person-fill-gear"></i>
         </Button>
     }

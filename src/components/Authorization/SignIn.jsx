@@ -117,7 +117,7 @@ function SignInForm(props) {
 
             </Form>
             <Row>
-                Already have an account? 
+                Don't have an account? 
                 <Row style={{height: "15px"}}></Row>
                 <Button variant="outline-secondary" onClick={go_to_registration}>Sign up!</Button>
             </Row>
